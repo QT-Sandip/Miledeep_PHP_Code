@@ -1,0 +1,1020 @@
+<?php
+session_start();
+
+$PoID=$_GET['id'];
+include ($_SERVER['DOCUMENT_ROOT']."/includes/config.php");
+include ($_SERVER['DOCUMENT_ROOT']."/Libraries/tcpdf/tcpdf.php");
+include ($cp."Includes/IncludePage.php");
+
+
+	
+ $ID=$_GET['id'];
+ $Type=$_GET['Type'];
+
+ 
+$SqlStatus="SELECT * FROM $TblScrmPIData  WHERE PoID='$PoID'";
+$StmtStatus=$iconn->query($SqlStatus); 
+$PoStatus = $StmtStatus->fetch_assoc();
+
+$CustomInvoiceSql="SELECT *,SPC.Name as PortofDischarge,SPC.CountryCode as CountryCode,
+SC.name as PortofDischargeCountry,SL.name as PortOfLoadingCountry,SP.Name as PortOfLoading FROM $ScrmCustomInvoices as SCV 
+   left JOIN $ScrmShipmentDetails as SSD on SSD.PiID=SCV.PiID
+   left JOIN $ScrmShipmentDispatchDetails as SSDD on SSDD.PIID=SCV.PiID
+   left JOIN $ScrmLogisticsDetails as SLD on SLD.PiID=SCV.PiID
+
+ left JOIN $TblScrmPortCities as SPC on SPC.PortId=SSD.PortofDischarge
+ left JOIN $TblScrmPortCities as SP on SP.PortId=SSD.PortOfLoading
+ left JOIN $TblScrmCountriesList as SC on SC.id=SPC.Country
+ left JOIN $TblScrmCountriesList as SL on SL.id=SP.Country
+
+ WHERE SCV.PiID='$PoID'";
+ $CustomInvoiceExec=$iconn->query($CustomInvoiceSql); 
+$CustomInvoiceRow = $CustomInvoiceExec->fetch_assoc();
+
+ $SqlScrmPoData="SELECT * FROM $TblScrmPIData as SPD 
+ left JOIN $TblScrmConsigneeDetails as SCD on SPD.ConsigneeID=SCD.ConID
+ left JOIN $TblScrmCountriesList as SCL on SPD.DestinationCountry=SCL.id
+ left JOIN $TblScrmPortCities as SPC on SPD.PortOfDischarge=SPC.PortId
+ left JOIN $TblScrmPaymentTerms as SPT on SPD.PaymentTerms=SPT.ID
+ WHERE PoID='$PoID'"; 
+ 
+ $SqlPaymentTerms="SELECT * FROM $TblScrmPoData as SPD 
+ left JOIN $TblScrmPaymentTerms as SPT on SPD.PaymentTerms=SPT.ID
+ WHERE PoID='$PoID'"; 
+ 
+ 
+$StmtPaymentTerms=$iconn->query($SqlPaymentTerms);
+$RowPaymentTerms = $StmtPaymentTerms->fetch_assoc();
+
+ 
+$StmtPoData=$iconn->query($SqlScrmPoData); 
+$PoDataRow = $StmtPoData->fetch_assoc();
+$ExpID=$PoDataRow['ExporterID'];
+$ProcessorID=$PoDataRow['ProcessorID'];
+$ApprovedBy=$PoDataRow['ApprovedBy'];
+
+
+/*$SqlLogin="SELECT * FROM login  WHERE USER_ID='$ApprovedBy'";
+$StmtLogin=$iconn->query($SqlLogin); 
+$RowLogin = $StmtLogin->fetch_assoc();
+$SignURL=$RowLogin['SignURL'];*/
+
+
+$ExporterData=getExporterDetails($ExpID);
+$ProcessorData=getExporterDetails($ProcessorID);
+
+$PaymentTerms=$PoDataRow['PaymentTerms'];
+$DeliveryTerms=$PoDataRow['DeliveryTerms'];
+$BankID=$PoDataRow['BankID'];
+  $Status=$PoStatus['Status']; 
+
+
+ 
+
+//require_once('../tcpdf/tcpdf.php'); 
+	
+
+class MYPDF extends TCPDF { 
+ 
+    public function Header() {
+		
+	global $Status;
+	
+		if($Status==0){
+	$StatusTerm="(Approval Pending)";
+}
+else if($Status==2){
+	$StatusTerm="(cancelled)";
+}
+	
+else if($Status==4){
+	$StatusTerm="(Rejected)";
+}
+global $Header;		
+        $image_file = 'images/ds_logo.jpg';
+        $this->SetFont('helvetica', 'B', 8);
+		$this->Cell(110, 0, 'COMMERCIAL INVOICE '.$Header, 0, 0, 'R', 0, '', 0, false, 'T', 'M');
+		 $this->SetTextColor(255,0,0);
+		
+		$this->Cell(10, 0, ''.$StatusTerm, 0, 1, 'L', 0, '', 0, false, 'T', 'M');	
+    }
+	
+    public function Footer() {
+        $this->SetFont('helvetica', 'I', 8);
+		$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		$this->SetY(-5);
+   }
+}
+
+
+	
+    $pdf = new MYPDF('P', PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);  
+	
+	
+    
+	$pdf->SetCreator(PDF_CREATOR);  
+    $pdf->SetTitle('COMMERCIAL INVOICE : '.$Header);  
+    $pdf->SetHeaderData('', '', '', '');  
+    $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));  
+    $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));  
+    $pdf->SetDefaultMonospacedFont('helvetica');  
+    $pdf->SetFooterMargin(10); 
+	$pdf->SetHeaderMargin(5);	
+    $pdf->SetMargins(10, 10, 10,5);  
+    $pdf->setPrintHeader(true);  
+    $pdf->setPrintFooter(true);  
+	
+    $pdf->SetAutoPageBreak(TRUE, 5);  
+    $pdf->SetFont('helvetica', '', 11);  
+    $pdf->AddPage();  
+	
+	
+	
+	$table_data=getDS_TABLE($iconn,$ID);
+	$pdf->writeHTML($table_data);
+	 $pdf->SetFont('helvetica', '', 6);
+
+  
+/***$file_name=$ExporterData['InvShortCode'].'_'.$PoDataRow['InvNo'].'.pdf';**/
+
+/***uma 28-07-2022**/
+$CurrentMonth = date('n',strtotime($CustomInvoiceRow['CInvDate']));   
+if($PoDataRow['ExporterID']==5){		
+if($CurrentMonth<=3){
+	
+ 
+ $NxtYear = date('y',strtotime($CustomInvoiceRow['CInvDate']));  	
+ $CurrentYear = date('y',strtotime($CustomInvoiceRow['CInvDate']))-1;  	
+	
+} 
+else{ 
+
+ $CurrentYear = date('y',strtotime($CustomInvoiceRow['CInvDate']));  	 
+$NxtYear = date('y',strtotime($CustomInvoiceRow['CInvDate']))+1;  	
+ 
+}
+		}
+		else{		
+if($CurrentMonth<=3){
+	
+ 	
+ 
+ $NxtYear = date('y',strtotime($CustomInvoiceRow['CInvDate']));  	
+ $CurrentYear = date('Y',strtotime($CustomInvoiceRow['CInvDate']))-1;  	
+
+	
+} 
+else{ 
+ 
+$CurrentYear = date('Y',strtotime($CustomInvoiceRow['CInvDate']));  	 
+$NxtYear = date('y',strtotime($CustomInvoiceRow['CInvDate']))+1;  	
+  
+}
+		}
+/***uma 28-07-2022**/
+
+$file_name=$ExporterData['InvShortCode'].'-CI-'.$CustomInvoiceRow['CInvNo'].'-'.$CurrentYear.'-'.$NxtYear.'.pdf';
+//sme/pi/233/2022-23
+
+
+
+
+//echo $Type;
+ob_end_clean();
+if($Type==''){
+$Type='I';
+}else{
+	$Fname=__DIR__ ."/TempFolder/";
+	$Fname=$_SERVER['DOCUMENT_ROOT']."SalesNew/Reports/TempFolder/";
+	$file_name=$_GET['FileName'];
+	$file_name = str_replace('/','', $file_name );;
+	$file_name=$Fname.$file_name;
+}
+$pdf->Output($file_name, $Type);
+
+
+			
+
+
+function getDS_TABLE($iconn,$ID){
+	
+	global $PoDataRow,$RowPaymentTerms,$PoID;
+	
+	include ($_SERVER['DOCUMENT_ROOT']."/includes/config.php");
+include ($_SERVER['DOCUMENT_ROOT']."/includes/func.php");
+	include "../SalesInculdes/SalesConstants.php"; 
+
+	
+			
+			$F_NAME='';
+			$T_O_MCS='';
+			$DOE='';
+			$DOS='';
+			$TOTAL_MCS=0;
+			$TOTAL_SLAB=0;
+			$T_EACH_SLAB=0;
+			$TOTAL_NET_WT_KGS=0;
+            $TOTAL_NET_WT_LBS=0;			
+	        
+			
+		//uma
+		
+ $SQL_PO_GRADE_DATA="SELECT * FROM `$ScrmCIGradeData` where InvId='$ID'  ";
+$STMT_PO_GRADE_DATA=$iconn->query($SQL_PO_GRADE_DATA);
+
+WHILE($PO_GRADE_DATA = $STMT_PO_GRADE_DATA->fetch_assoc()){
+
+  $SLAB=$PO_GRADE_DATA['SLAB']; 
+  $TOTAL_SLAB+=$SLAB;
+  
+  $EACH_SLAB	=	$PO_GRADE_DATA['EACH_SLAB'];
+  $T_EACH_SLAB+=$EACH_SLAB;
+  
+  $MCS=	$PO_GRADE_DATA['Mcs']; 
+   $TOTAL_MCS+=$MCS; 
+  
+   $UOM=	$PO_GRADE_DATA['UOM']; 
+ /*  $BAP=	$PO_GRADE_DATA['BAP']; 
+  if($BAP=='NA'){
+	 $BAP='';  
+   }
+  ELSE{
+	$BAP=$BAP;  
+  }*/
+			
+  if($UOM=="LBS"){
+    $NET_WT_LBS=(($SLAB*($EACH_SLAB))*$MCS) ."LBS"; 
+  // $NET_WT_KGS=(($SLAB*($EACH_SLAB*453))*$MCS)/1000 ."KGS"; 
+     $NET_WT_KGS=(($SLAB*($EACH_SLAB))*$MCS)/2.2 ."KGS"; 
+
+  
+  }
+ else if($UOM=="KGS"){
+     $NET_WT_KGS=(($SLAB*($EACH_SLAB))*$MCS) ."KGS";  
+ 
+ 
+   $NET_WT_LBS=(($SLAB*($EACH_SLAB*2.2))*$MCS) ."LBS"; 
+  
+  }
+    $TOTAL_NET_WT_KGS=$NET_WT_KGS+$NET_WT_KGS;    
+	   $TOTAL_NET_WT_LBS=$NET_WT_LBS+$NET_WT_LBS;		
+	   }	
+			$TOTAL_NET_WT_KGS;		
+            $TOTAL_NET_WT_LBS;	
+	         $TOTAL_MCS; 
+
+			
+	
+	 
+
+	
+	
+  
+global $CustomInvoiceRow,$ExpID ;
+global $PoDataRow ;
+global $ExporterData ;
+global $ProcessorData ;
+global $TblAdminBankDetails ;
+global $BankID ;
+global $TblScrmPaymentTerms ;
+global $TblAdminExporterDetails ;
+global $SignURL ;
+			$DestinationCountryId=$PoDataRow['DestinationCountry'];
+	 			$ShowFrightCharge=$PoDataRow['ShowFrightCharge'];
+
+	//Exporter /Shipper Details
+	
+			//$ExporterID=$ExporterData['ExpID'];
+			$ExporterName=$ExporterData['ExpName'];
+			$ExporterAddress=$ExporterData['ExpAddress'];
+			$ExporterUsfdaNo=$ExporterData['ExpUsfdaNo'];
+			$ExporterApprovalNo=$ExporterData['ExpApprovalNo'];
+			$ExporterIeCustomsNo=$ExporterData['ExpIeCustomsNo']; 
+			$ExporterGstNo=$ExporterData['ExpGstNo']; 
+			$ExporterIeCode=$ExporterData['ExpIeCode'];
+			$ExporterRecAdd=$ExporterData['ImporterRecordAddress'];
+			$AuthSign=$ExporterData['AuthSign'];
+	//Processor/Packer
+
+$ProcessorIeCustomsNo=$ProcessorData['ExpIeCustomsNo'];
+$ProcessorID=$PoDataRow['ProcessorID'];	
+			$ProcessorNamee=$ProcessorData['ExpName'];
+			IF($ProcessorID==3){
+	 $SqlProcessor="select substring_index ('$ProcessorNamee',' ',4) AS STRING  "; 
+	$StmtProcessor=$iconn->query($SqlProcessor);
+	$RowProcessor=$StmtProcessor->fetch_assoc();
+	 $ProcessorName=$RowProcessor['STRING'];
+	 
+	 $SqlProcessor1="select substring_index ('$ProcessorNamee',' ',-2) AS STRING  "; 
+	$StmtProcessor1=$iconn->query($SqlProcessor1);
+	$RowProcessor1=$StmtProcessor1->fetch_assoc();
+	 //$ProcessorName1=$RowProcessor1['STRING']; 
+			}
+ELSE	{
+	$ProcessorName=$ProcessorNamee;
+}
+$ProcessorName=$ProcessorData['ExpName'];
+		
+			//$ProcessorAddress=$ProcessorData['ExpAddress'];
+			$ProcessorAddress=$ProcessorData['PackerAddress'];
+			$ProcessorUsfdaNo=$ProcessorData['ExpUsfdaNo'];
+			$ProcessorApprovalNo=$ProcessorData['ExpApprovalNo'];
+			$ProcessorFEI=$ProcessorData['ExpFeiNo'];
+			
+
+		
+$InvNO=$ExporterData['InvShortCode'].$CustomInvoiceRow['CInvNo'].'/'.$CurrentYear.'-'.$NxtYear;
+
+			$InvDate=getFormatedDate($CustomInvoiceRow['CInvDate']);
+			if($InvDate=='01-01-1970'){
+				
+				$InvDate=': na';
+			}
+			//$PoDate=getFormatedDate($CustomInvoiceRow['CpoDate']);
+			
+			//$PreCarriageBy=$CustomInvoiceRow['CInvNo'];
+			
+			$ContainerNumber=$CustomInvoiceRow['ContainerNo'];
+			$SealNo=$CustomInvoiceRow['SealNo'];
+			//$VesselName=$CustomInvoiceRow['VesselName'];
+					if($DestinationCountryId!='26'){
+
+			$VesselNumber=$CustomInvoiceRow['VesselName'].'/'.$CustomInvoiceRow['VOY'];}
+			else{
+				
+						$VesselNumber=$CustomInvoiceRow['VesselName'].' '.$CustomInvoiceRow['VOY'];}
+
+			$FrieghtCharge=$CustomInvoiceRow['FrieghtCharge'];
+			$ExchangeRate=$CustomInvoiceRow['ExchangeRate'];
+			$BLNo=$CustomInvoiceRow['BLNo'];
+			$SBNo=$CustomInvoiceRow['SBNo'];
+			$BLDate=date('d-m-Y',strtotime($CustomInvoiceRow['BLDate']));
+			$SBDate=date('d-m-Y',strtotime($CustomInvoiceRow['SBDate']));
+			$PortOfDischarge=$CustomInvoiceRow['PortofDischarge'];
+			$FinalDestination=$CustomInvoiceRow['FinalDestination'];
+			$NoOfDays=$CustomInvoiceRow['NoOfDays'];
+			$Discount=$CustomInvoiceRow['Discount'];
+			$IGST=$CustomInvoiceRow['IGST'];
+			$CIDescription=$CustomInvoiceRow['CIDescription'];
+			$AdvanceAmount=$CustomInvoiceRow['AdvanceAmount'];
+
+
+			
+			if($BLDate=='01-01-1970'){
+				$BLDate='NA';
+			}
+			else{
+		$BLDate=$BLDate;
+
+			}
+			if($SBDate=='01-01-1970'){
+				$SBDate='NA';
+			}
+			else{
+				$SBDate=$SBDate;
+			}
+			
+			
+			if($NoOfDays==0){
+				$NoOfDays='';
+			}
+			else{
+				$NoOfDays=$NoOfDays.'DAYS FROM BL';
+			}
+			
+			
+			
+			$PoNo=$PoDataRow['PoNo'];
+			$PoDate=getFormatedDate($PoDataRow['PoDate']);
+			
+			$PoDate= "& Dated :".$PoDate;
+			IF($PoNo ==''){
+				
+			$PoDate=' ';	
+			}
+			
+			$ConsigneeName=$PoDataRow['ConsigneeName'];
+			$ConsigneeAddress=$PoDataRow['ConsigneeAddress'];
+
+			
+			/*$PortOfDischarge=$PoDataRow['Name'];
+			$FinalDestination=$PoDataRow['FinalDestination'];*/
+			$DestinationCountry=$PoDataRow['name'];
+			$ByPayment=$PoDataRow['ByPayment'];
+			$PreparedBy=$PoDataRow['PreparedBy'];
+			//$PaymentTerms=$PoDataRow['PaymentName'];
+			$PaymentTerms=$RowPaymentTerms['PaymentName'];
+			$DeliveryTerms=$PoDataRow['DeliveryTerms'];
+			$ShippingTerms=$PoDataRow['ShippingTerms'];
+			$QtyUnit=$PoDataRow['QtyUnit'];
+			//$DestinationCountryId=$PoDataRow['DestinationCountry'];
+
+
+	 if($DestinationCountryId==26){
+			$PlaceOfReceiptBy=str_ireplace("PORT"," ",$CustomInvoiceRow['PlaceOfRecipt']);
+			$PortOfLoading=str_ireplace("PORT"," ",$CustomInvoiceRow['PortOfLoading']);
+			}
+			ELSE{
+				$PlaceOfReceiptBy=$CustomInvoiceRow['PlaceOfRecipt'];
+			$PortOfLoading=$CustomInvoiceRow['PortOfLoading'];
+			}
+	
+			
+	$content='';
+	                                                                  
+
+	$size=45;	
+	$size1=55;	
+
+	
+
+$StyleTbl='Style="border: 1px solid #ccc;
+  color: #37393b;
+  margin: 10px 0 0 0;
+  text-shadow: #fff 1px -1px 1px;
+  text-align: left;
+  width: 100%;"';
+  
+  $StyleTd='Style=" margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  vertical-align: baseline;
+  background: transparent;"';
+ 
+	 $content .= '<table border="1" cellspacing="0" cellpadding="0">  
+				
+				 <tr>  
+				<th width="45%">
+				<table border="1" cellspacing="0" cellpadding="2">';
+				
+		if($PoDataRow['ExporterID']==5){		
+		$content .= '<tr>
+           		
+				<th  align="LEFT" ><font size="7"><b>Exporter / Shipper:</b>
+				<br>'.$ExporterName.' 
+				<BR> '.$ExporterAddress.'<BR>
+				IE CODE  : '.$ExporterIeCode.'<BR>
+				GST NO  : '.$ExporterGstNo.'
+				</font></th>
+		</tr>';}
+				else{		
+		$content .= '<tr> 
+           		
+				<th  align="LEFT" ><font size="7"><b>Exporter / Shipper:</b>
+				<br>'.$ExporterName.' 
+				<BR> '.$ExporterAddress.'<BR>';
+				if($DestinationCountryId!='26'){
+					//$content .= 'IE CODE  : '.$ExporterIeCode.'<BR>GST NO  : '.$ExporterGstNo.'</font></th></tr>';
+					$content .= 'USFDA REGISTRATION NO  : '.$ExporterUsfdaNo.'<BR>
+				IE CODE  : '.$ExporterIeCode.'<BR>GST NO  : '.$ExporterGstNo.'
+				</font></th></tr>';
+					}
+				else{
+			$content .= '</font></th>
+				</tr>';}
+				
+				}
+				
+		$content .= '		<tr>  
+           		
+				<th  align="LEFT" ><font size="7"><br><b><u>Applicant/Ultimate Consignee</u></b>
+				<br><br>'.$ConsigneeName.',<br><br>'.$ConsigneeAddress.'
+				<br><br><br><br><br><br><br>
+				
+				
+				</font></th>
+			
+				</tr>
+				
+				<tr>  
+           		
+				<th  align="LEFT" width="50%" ><font size="7">Pre-Carriage by
+				<br  align="center">REFER CONTAINER</font></th>
+				<th  align="LEFT" width="50%" ><font size="7">Place of Receipt by
+				<br align="center">'.$PlaceOfReceiptBy.'</font></th>
+				
+				</tr>
+				<tr>  
+           		
+				<th  align="LEFT" width="50%" ><font size="7">Vessel / Freight No.  <BR align="center">'.$VesselNumber.'  
+				</font></th>
+				<th  align="LEFT" width="50%" ><font size="7">Port of Loading
+				<br align="center">'.strtoupper($PortOfLoading).','.strtoupper($CustomInvoiceRow['PortOfLoadingCountry']).'</font></th>
+				
+				</tr>
+				
+				<tr>  
+           		
+				<th  align="LEFT" width="50%" ><font size="7">Port of Discharge
+				<br align="center">'.strtoupper($PortOfDischarge).' '.$CustomInvoiceRow['CountryCode'].','.($CustomInvoiceRow['PortofDischargeCountry']).'</font></th>
+				<th  align="LEFT" width="50%" ><font size="7">Final Destination
+				<br align="center">'.$FinalDestination.'
+				</font></th>
+				
+				</tr>
+				</table>
+				</th>
+				
+				
+				<th width="55%">
+				<table border="1" cellspacing="0" cellpadding="1">
+				
+				<tr > 
+				<th  align="LEFT"  ><font size="7" ><b> Invoice No. & Date.</b>
+				<br> '.$InvNO.',Dated '.$InvDate.' </font></th>
+				</tr>
+				
+				<tr> 
+				<th  align="LEFT" ><font size="7"><b> Buyer`s Order No. & Date. </b>
+				<br> '.$PoNo.$PoDate.' </font></th>
+				</tr>';
+			if($ProcessorID==3){	
+			$content .= '		<tr > 
+				<th  align="LEFT"  ><font size="7" ><b> Other Refrence(s) :
+				<b style="color:white">_________________________</b>  E.I.A. APPROVAL# '.$ProcessorApprovalNo.'</b>
+				<br>
+				<u><b> Packer</u> :</b><br> '.$ProcessorName.''.$ProcessorName1.'<br> '.$ProcessorAddress.' ';
+		if($DestinationCountryId!='26'){
+			$content .= '
+				
+				<br> USFDA REGISTRATION NO  : '.$ProcessorUsfdaNo.'<BR> FEI # :  '.$ProcessorFEI.'';
+		}
+		$content .= '</font></th>
+			</tr>';}
+			else{
+				$content .= '		<tr > 
+				<th  align="LEFT"  ><font size="7" ><b> Other Refrence(s) :
+				<b style="color:white">_________________________</b>  E.I.A. APPROVAL# '.$ProcessorApprovalNo.'</b>
+				<br>
+				<u><b> Packer</u> :</b><br> '.$ProcessorName.'<br> '.$ProcessorAddress.'  ';
+		if($DestinationCountryId!='26'){
+			$content .= '
+				
+				<br> USFDA REGISTRATION NO  : '.$ProcessorUsfdaNo.'<BR> FEI # :  '.$ProcessorFEI.'';
+		}
+		$content .= '</font></th>
+			</tr>';
+			}
+			
+				
+	
+			 if($PoDataRow['ShippingTerms']=='DDP'){
+				
+			 $content .= '	<tr> 
+           		
+                <th  align="left" width="100%"><font size="7"> Buyer (If other than Consignee) :<br>
+				<b><u> Importer of Record:</u></b> <br> CUSTOMS ASSIGN  # '.$ProcessorIeCustomsNo.'
+				<br> '.$ExporterRecAdd .' </font></th>
+				</tr>';}
+				
+
+
+		else{
+				
+			 $content .= '	<tr> 
+           		
+                <th  align="left" width="100%"><font size="7"> Buyer (If other than Consignee) :<br></font></th>
+				</tr>';}
+				
+			$content .= '	<tr> 
+				<th border="1"  align="left" height="50%" width="50%"><font size="7"> Country of Origin of Goods 	
+				<br><b align="center"> INDIA</b></font></th>
+                <th border="1"  align="left" width="50%"><font size="7"> Country of Final Destination  
+				<br><b align="center">  '.$DestinationCountry.'</b></font></th>
+				</tr>
+				
+			<tr> 
+				<th  align="LEFT"  width="100%"><font size="7"><b><u>Terms of Delivery and Payment:</u>
+				</b><BR>'.$PaymentTerms.' '.$NoOfDays.'<br>
+				SHIPMENT TERM : '.$ShippingTerms .'  '.strtoupper($FinalDestination).'';
+				if($DestinationCountryId!=26){
+				
+				
+				$content .= '('.$DeliveryTerms.')';
+				}
+				
+				$content .= '<br>BL NUMBER : '.$BLNo.'    ,DATED :'.$BLDate.' <br>SB NUMBER : '.$SBNo.'  ,DATED : '.$SBDate.'</font> </th>
+				</TR>
+				
+				</table>
+				</th>
+				
+				</tr> ';
+				
+				
+				if($DestinationCountryId==26){
+					$LBS='KGS';
+				}	
+else{
+$LBS='LBS'	;
+}				
+				
+				
+			$content .= '	<tr> 
+				<th width="100%" >
+				<table border="0" cellspacing="0" cellpadding="2">	
+<tr> 				
+           		<th  align="left"  width="12.5%"style="border-right: 1px solid black;"><font size="7">Shipping Marks: <br><br><BR align="center"> NO MARKS</font></th>
+                <th  align="LEFT" width="10%" style="border-right: 1px solid black;"><font size="7">No. & kind of packings <br><BR><b> '.$TOTAL_MCS.'</b> MCS</font></th>
+                <th  align="LEFT" width="22.5%" style="border-right: 1px solid black;"><font size="7">Container Number <br><br><br><font size="10"><b align="center">'.$ContainerNumber.'</b></font></font></th>
+                <th  align="LEFT" width="13.5%" style="border-right: 1px solid black;"><font size="7">Seal Number <br><br><br><font size="10"><b align="center">'.$SealNo.'</b></font></font></th>
+                <th  align="center" width="13.5%" style="border-right: 1px solid black;border-bottom: none">
+				<font size="7">Quantity in '.$LBS.' </font></th>
+                <th  align="center" width="13.5%" style="border-right: 1px solid black;border-bottom: none"><font size="7">Unit Price <br>USD/'.$LBS.' '.$PoDataRow['ShippingTerms'] .' 
+				<br><b>'.strtoupper($FinalDestination).'</b></font></th>
+                <th  align="center" width="14.5%" style="border-right: 1px solid black;border-bottom: none"><font size="7">Amount in U.S.D '.$PoDataRow['ShippingTerms'] .'
+				<br><b> '.strtoupper($FinalDestination).'</b></font></th>
+                </tr>
+				
+				</table>
+				</th>
+				</tr>
+				
+				';
+				if($DestinationCountryId!='26'){
+				$description_head='<B><u>Description of Goods: </u></B><BR>1 X 40 FCL <BR>PO NO. '.$PoNo.'<BR>';}
+				else{
+				$description_head='<B><u>Description of Goods: </u></B><BR>1 X 40 FCL <BR>';}
+				
+				$W_SPACE='<b style="color:white"> yuhjutgfrtgujkiolmnbvgftrkliomkjhygtfrdeswderfgtyhjmnkih</b>';
+				$Whitspace='<b style="color:white"> yuhju</b>';
+				$FontSize="7";
+				//$TOTAL_MCS=0;
+			$content.='<tr >
+				
+			<table border="0" cellspacing="0" cellpadding="1">
+			<tr>
+			<td width="58.5%" style="border-right: 1px solid black;" ><font size="'.$FontSize.'" >'
+			.$description_head.' </font></td>
+			<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'"></font></td>
+			<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'"></font></td>
+			
+			</tr>
+			'
+			;
+			
+
+			  $SqlVarietyMcs="
+			SELECT sum(McS) As VarietyMcs,Variety,Grade,PackingStyle,Brand,PackingStyleID,BAP FROM `$ScrmCIGradeData` 
+			left join `$TblAdminPackingStyles` as Aps on PackingStyleID=Aps.PCKID
+			 WHERE InvId='$ID'  GROUP by Variety,PackingStyleID,Brand"; 
+			$StmtVarietyMcs=$iconn->query($SqlVarietyMcs);
+			while($VarietyMcsRow=$StmtVarietyMcs->fetch_assoc()){
+				
+				
+				$Variety=$VarietyMcsRow['Variety'];
+				$Grade=$VarietyMcsRow['Grade'];
+				$Brand=$VarietyMcsRow['Brand'];
+				 $BAP=	$VarietyMcsRow['BAP']; 
+				 $PackingStyleID=	$VarietyMcsRow['PackingStyleID']; 
+  if($BAP=='NA'){
+	 $BAP='';  
+   }
+  ELSE{
+	$BAP=$BAP;  
+  }
+			if($CustomInvoiceRow['Description']!=''){	
+			$varietyDescription=$CustomInvoiceRow['Description'];
+				
+			}
+			else{
+				$varietyDescription=' CARTONS OF '.$VarietyMcsRow['Variety'];
+
+				}
+				
+				$varietyDescription=' CARTONS OF '.$VarietyMcsRow['Variety'];
+				$content.='
+			<tr>
+			<td width="58.5%" style="border-right: 1px solid black;" ><font size="'.$FontSize.'" > '
+			.$VarietyMcsRow['VarietyMcs'].'  '.$varietyDescription.'<br>
+			PACKING : '.$VarietyMcsRow['PackingStyle'].'  
+			';
+			
+			if($DestinationCountryId!=26){
+			$content.='NET WEIGHT PER CARTON.'.$Whitspace.'<B> BRAND </B>: '.$VarietyMcsRow['Brand'].' <B><br>'.$BAP.'</B>';
+			}
+			
+							
+		$content.='</font></td>
+			<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'"></font></td>
+			<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'"></font></td>
+			
+			</tr>
+			
+
+			
+			<tr>';
+						if($DestinationCountryId==26){
+
+						$content.='	<th align="center" width="40%" ><font size="'.$FontSize.'"> <u>SIZE(PCS/LB)</u></font></th>';}
+	else{
+
+						$content.='	<th align="center" width="40%" ><font size="'.$FontSize.'"> <u>SIZE</u></font></th>';}
+			$content.='<th align="center" width="18.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'"><u>QTY IN CS</u></font></th>
+			<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'"></font></td>
+			<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'"></font></td>
+			</tr>';
+			
+			//UMA
+				  $SqlVariety="SELECT * FROM `$ScrmCIGradeData` as PGD
+			left join $TblAdminPackingStyles as PS on PGD.PackingStyleID=PS.PCKID WHERE InvId='$ID' 
+			and Variety='$Variety' and Brand='$Brand'  
+		and	PackingStyleID='$PackingStyleID' order by abs(Grade)";  
+			$StmtVariety=$iconn->query($SqlVariety);
+				
+			while($RowVariety=$StmtVariety->fetch_assoc()){
+				
+				// 26 ID 26
+				
+				if( $PoDataRow['QtyUnit']=='KGS'){
+				$Qty=$RowVariety['Mcs']*$RowVariety['TotalSlabs'] * $RowVariety['SlabWeight'] * $RowVariety['MFactor'];
+				$UsdValue=($Qty)*$RowVariety['Price'];				
+				}else{
+				 $Qty=$RowVariety['Mcs']*$RowVariety['TotalSlabs'] * $RowVariety['SlabWeight'] * $RowVariety['LbsFactor'];
+				 $UsdValue=($Qty)*$RowVariety['Price'];
+				}
+				if($DestinationCountryId==26){
+				$UsdValue=number_format($UsdValue,2,'.','');
+				}
+				else{
+								$UsdValue=number_format($UsdValue,2);
+	
+				}
+				/*$Qty=$RowVariety['Mcs']*$RowVariety['TotalSlabs'] * $RowVariety['SlabWeight'] * $RowVariety['MFactor'];
+				$UsdValue=$RowVariety['Mcs']*$RowVariety['TotalSlabs'] * $RowVariety['SlabWeight'] *$RowVariety['Price'];	
+			*/
+			$content.='
+				<tr>
+				
+			<!--	<td align="center" width="12.5%" ><font size="7">
+				'.$RowVariety['Variety'].'</font></td> -->
+				<td align="center" width="40%"  ><font size="'.$FontSize.'">
+				'.$RowVariety['Grade'].'</font></td>
+				<!--<td align="center" width="22.5%"><font size="7">
+				'.$RowVariety['PackingStyle'].'</font></td> -->
+				<td align="center" width="18.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'">
+				'.$RowVariety['Mcs'].'</font></td>
+				
+				<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'">
+				'.$Qty.'.000</font></td>
+				
+				<td align="center" width="13.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'">
+				'.$RowVariety['Price'].'</font></td>
+				<td align="center" width="14.5%" style="border-right: 1px solid black;"><font size="'.$FontSize.'">
+				'.$UsdValue.'</font></td>
+				
+				</tr>';
+			}
+
+
+			}//UMA
+			
+			$sqlExt="sum(Mcs*TotalSlabs*SlabWeight*MFactor) as NetWgtKgs,
+				sum(Mcs*GrossWeight*MFactor) as GrossWeightKgs,
+				sum(Mcs*TotalSlabs*SlabWeight*LbsFactor) as NetWgtLbs,
+				sum(Mcs*GrossWeight*LbsFactor) as GrossWeightLbs";
+			
+			
+			 $SqlTotal="SELECT sum(Mcs) as MCS,  $sqlExt  ,
+			sum(Price) as Price,			
+			sum(Mcs*TotalSlabs*SlabWeight*Price * Mfactor) as PriceKgs,
+			sum(Mcs*TotalSlabs*SlabWeight*Price * LbsFactor) as PriceLbs			FROM `$ScrmCIGradeData` 
+			as PGD left join AdminPackingStyles as PS on PGD.PackingStyleID=PS.PCKID WHERE InvId='$ID'";
+			$StmtTotal=$iconn->query($SqlTotal);
+			$RowTotal=$StmtTotal->fetch_assoc();
+			
+			$NetWgtKgs = $RowTotal['NetWgtKgs'];
+			$NetWgtLbs = $RowTotal['NetWgtLbs'];
+			$GrossWeightKgs = $RowTotal['GrossWeightKgs'];
+			$GrossWeightLbs = $RowTotal['GrossWeightLbs'];
+			
+			if( $PoDataRow['QtyUnit']=='KGS'){				
+				$Weight = $RowTotal['NetWgtKgs'];	
+				//$Weight = $RowTotal['NetWgtLbs']*0.454;	
+				$Price = $RowTotal['PriceKgs'];	
+			}else{
+				$Weight = $RowTotal['NetWgtLbs'];
+				//$Weight = $RowTotal['NetWgtKgs'];
+				$Price = $RowTotal['PriceLbs'];
+			}
+			
+			
+			$content.='
+				<tr>
+				
+				<td align="center" width="40%" style="border-top: 1px solid black;" ><font size="7"><B>
+				TOTAL</B></font></td>
+				<td align="center" width="18.5%" style="border-top: 1px solid black; border-right: 1px solid black;" ><font size="7">
+				'.$RowTotal['MCS'].'</font></td>
+				<td align="center" width="13.5%" style="border-top: 1px solid black;border-right: 1px solid black;"><font size="7">
+				'.$Weight.'.000</font></td>
+				<td align="center" width="13.5%" style="border-top: 1px solid black;border-right: 1px solid black;" ><font size="7">
+				</font></td>';
+				if($DestinationCountryId==26){
+			$content.='	<td align="center" width="14.5%" style="border-top: 1px solid black;border-right: 1px solid black;"><font size="7">
+				'.number_format($Price,2,'.','').'</font></td>';}
+				else{
+			$content.='	<td align="center" width="14.5%" style="border-top: 1px solid black;border-right: 1px solid black;"><font size="7">
+				'.number_format($Price,2).'</font></td>';}
+				
+				
+				$content.='</tr>';
+					 IF($AdvanceAmount>0){
+				
+							$Price =$Price-$AdvanceAmount;
+if($DestinationCountryId==26){
+			$content.= '	<tr>
+				<td align="right" width="85.5%" style="border-top: 1px solid black;border-right: 1px solid black;" ><font size="7"><B>
+				LESS ADVANCE :</B></font></td>
+				<td align="center" width="14.5%" style="border-top: 1px solid black;" ><font size="7"><B>
+				'.number_format($AdvanceAmount,2,'.','').'</B></font></td>
+				</tr><tr>
+				<td align="right" width="85.5%" style="border-top: 1px solid black;;border-right: 1px solid black;" ><font size="7"><B>
+				BALANCE RECEIVABLE AMOUNT IN USD :</B></font></td>
+				<td align="center" width="14.5%" style="border-top: 1px solid black;" ><font size="7"><B>
+				'.number_format($Price,2,'.','').'</B></font></td>
+					 </tr>';}
+				else{
+					$content.= '	<tr>
+				<td align="right" width="85.5%" style="border-top: 1px solid black;border-right: 1px solid black;" ><font size="7"><B>
+				LESS ADVANCE :</B></font></td>
+				<td align="center" width="14.5%" style="border-top: 1px solid black;" ><font size="7"><B>
+				'.number_format($AdvanceAmount,2).'</B></font></td>
+				</tr><tr>
+				<td align="right" width="85.5%" style="border-top: 1px solid black;;border-right: 1px solid black;" ><font size="7"><B>
+				BALANCE RECEIVABLE AMOUNT IN USD :</B></font></td>
+				<td align="center" width="14.5%" style="border-top: 1px solid black;" ><font size="7"><B>
+				'.number_format($Price,2).'</B></font></td>
+				</tr>';
+				}		
+				}
+			 
+			 IF($IGST=='DISCOUNT'){
+				
+				$DiscountAmount=($Price*$Discount)/100;
+				$TotalDiscount=$Price-$DiscountAmount;
+				
+				
+				if($DestinationCountryId==26){
+					$DiscountAmount=number_format($DiscountAmount,2,'.','');
+					$TotalDiscount=number_format($TotalDiscount,2,'.','');
+				}
+				else{
+					$DiscountAmount=number_format($DiscountAmount,2);
+					$TotalDiscount=number_format($TotalDiscount,2);
+				}
+				
+			$content.= '	<tr>
+				<td align="right" width="85.5%" style="border-top: 1px solid black;border-right: 1px solid black;" ><font size="7"><B>
+				LESS TRADE DISCOUNT '.$Discount.'%</B></font></td>
+				<td align="center" width="14.5%" style="border-top: 1px solid black;" ><font size="7"><B>
+				'.$DiscountAmount.'</B></font></td>
+				</tr><tr>
+				<td align="right" width="85.5%" style="border-top: 1px solid black;;border-right: 1px solid black;" ><font size="7"><B>
+				TOTAL AMOUNT:</B></font></td>
+				<td align="center" width="14.5%" style="border-top: 1px solid black;" ><font size="7"><B>
+				'.$TotalDiscount.'</B></font></td>
+				</tr>';
+						
+				}
+			
+			$content.= '</table>
+			  </tr>';
+if($CustomInvoiceRow['BankID']==0){
+$BankID;	
+}
+else{
+	$BankID=$CustomInvoiceRow['BankID'];
+}
+  $SqlBank="SELECT * FROM $TblAdminBankDetails WHERE ID='$BankID'";
+$StmtBank=$iconn->query($SqlBank); 
+$RowBank = $StmtBank->fetch_assoc();
+$BenfName=$RowBank['AccntName'];
+$BenfAccNo=$RowBank['AccountNumber'];
+$BenfBankName=$RowBank['BankName'];
+$BenfBankAddress=$RowBank['BankAddress'];
+$BenfBankCode=$RowBank['SwiftCode'];
+	 
+ if($TotalDiscount==''){
+
+				$BILL_WORD=numberTowords($Price);
+	 }else{
+		 
+				
+				$BILL_WORD=numberTowords($TotalDiscount);
+	 }		
+	
+				//$BILL_WORD=numberTowords($Price);
+				
+				
+				$DutiesPrice=(($Price-$FrieghtCharge)/101.35)*1.35;
+				$DutiesPrice=$DutiesPrice+125;
+							if($DestinationCountryId==26){
+                     $ShippingTerms=$PoDataRow['ShippingTerms'] ;
+							}
+							else{
+								$ShippingTerms=='';
+							}
+			$content.='<tr> '.
+           		 $TOTAL.'
+				 
+				 
+	
+				</tr>
+
+				<tr>  
+           		<th  align="LEFT"  width="100%"><font size="7"> SHIPPING TERMS   :'.$ShippingTerms.'  '.$FinalDestination .'
+				
+				<BR>'.str_replace(array("\r\n", "\r", "\n"), "<br>", $CIDescription).' 
+				
+				<BR>';
+			if($BankID!=5&&$DestinationCountryId!=26){
+			$content.='	<BR><B><U style="background-color:grey"> OUR BANKING DETAILS        : </U></B><br>
+				
+				<br> BENEFICIARY NAME <b style="color:white">-----------------------</b>: <b>'.$RowBank['AccntName'].'</b>
+				<BR> BENEFICIARY ACCOUNT NUMBER<b style="color:white">----</b>: <b>'.$RowBank['AccountNumber'].'</b> 
+				<BR> BANK NAME AND ADDRESS<b style="color:white">-------------</b>: <b>'.$RowBank['BankName'].','.$RowBank['BankAddress'].' </b>
+				<BR> SWIFT CODE<b style="color:white">-----------------------------------</b>: <b>'.$RowBank['SwiftCode'].'</b>';
+			}
+			else if($DestinationCountryId==26){
+				$content.=' ';
+			}
+			else{
+				$content.=' The underlying account receivable of the invoice has been assigned to Tradewind Invest LLC. Your liability remains in force until settlement of the full invoice amount is 
+				<br> received  into the account of Tradewind Elektra LLC, Unicredit Bank AG New York Branch, ABA routing: 0260-0880- 8, A/C No.: 0710144501, Swift: HYVEUS33XXX or you 
+				<br> may choose to issue a check to Tradewind Elektra LLC. In case you wish to make out a check please send it to Unicredit Bank AG, 150 East 42nd Street, New York, NY 
+				<br> 10017, Attn. Checks Processing Center.';
+			}
+			
+			//uma	}
+				//}	
+				$NetWgtKgs = $RowTotal['NetWgtKgs'];
+			$NetWgtLbs = $RowTotal['NetWgtLbs'];
+			$GrossWeightKgs = $RowTotal['GrossWeightKgs'];
+			$GrossWeightLbs = $RowTotal['GrossWeightLbs'];
+				
+				
+				
+				if($QtyUnit=='KGS'){
+				$content.='<BR><BR><b> NET WEIGHT <b style="color:white">------</b>: '.number_format($NetWgtKgs,3,'.','').' KGS</b>
+				<BR><b> GROSS WEIGHT <b style="color:white">-</b>: '.number_format($GrossWeightKgs,3,'.','').' KGS</b> 
+				</font></th>';	
+				}else{
+				$content.='<BR><BR> NET WEIGHT<b style="color:white">-----------------------------------</b>: 
+				<b>'.number_format($NetWgtLbs, 3, '.', '').'LBS</b>
+				<b style="color:white">-----------------------------------</b><b>'.number_format(($NetWgtLbs*0.454),3,'.','').' KGS</b>
+				<BR> GROSS WEIGHT<b style="color:white">------------------------------</b>: 
+				<b>'.number_format($GrossWeightLbs,3,'.','').'LBS</b>
+				<b style="color:white">-----------------------------------</b><b>'.number_format(($GrossWeightLbs*0.454),3,'.','').' KGS</b> 
+				</font></th>';	
+				}
+				
+				
+				
+               $content.='</tr>
+				
+						
+	        
+				<tr>  
+           		<th  align="LEFT"  width="100%"><font size="7"> AMOUNT CHARGABLE IN US.$: <b>'.$BILL_WORD.'</b><BR> <BR> 
+				
+				
+				</font></th>    
+				
+				 
+				
+               
+</tr>
+<tr>
+<th  style="valign:bottom;"  width="70%"  ><font size="8" ><B><U> DECLARATION:</U></B> WE DECLARE THAT THIS INVOICE SHOWS
+				THE ACTUAL PRICE OF GOODS DESCRIBED AND THAT ALL PARTICULARS ARE TRUE AND CORRECT</font></th>';
+  if($DestinationCountryId!=26){
+  $content.='<th  align="center"  width="30%"><font size="7"> Signature:<br><br>
+  				
+
+				<B> '.$AuthSign.',</B><BR><BR><BR><BR>
+				 
+				<!--<img src="'.$SignURL.'" 
+				 width="100" height="10"style="width: 100" align="center" align="middle"/>-->
+								
+				
+				<p STYLE="text-align:center" ><b> Authorised Signature  </b></p></font></th>';}
+		else{
+  $content.='<th  align="center"  width="30%"><font size="7"> Signature:<br><br><br><br><br><br>
+  				
+
+			</font></th>';}
+				
+				
+$content.='</tr>
+				
+				
+				</table>'; 
+	
+	return $content;
+	
+	}
+
+
+?>

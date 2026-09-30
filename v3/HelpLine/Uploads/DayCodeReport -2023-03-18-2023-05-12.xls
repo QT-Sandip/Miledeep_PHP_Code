@@ -1,0 +1,26 @@
+
+				<h3 align="center"></h3>
+			  <h3 align="center"> DayCode Report ( 18-Mar-2023 to  12-May-2023 )</h3>
+			  
+			  
+			  <table border="1" cellspacing="0" cellpadding="5">
+			   <tr>  
+ <th  align="center"  width="3%"><B>S No.</B></th>           
+				 
+				<th  align="center" width="8%" ><B>Day Code</B></th>
+				<th  align="center"  width="11%"><B>Lot No</B></th>	
+				   <th  align="center"  width="8%"><B>Traceability</B></th>					   
+				   <th  align="center"  width="11%"><B>Received Qty</B></th>
+				   <th  align="center"  width="8%"><B>Finished Qty</B></th>					   
+			
+				   <th  align="center"  width="11%"><B>Sample Id/Code</B></th>
+                <th  align="center"  width="11%" <B>Name Of The Representation</B></th>
+				   
+				   <th  align="center"  width="11%"><B>Date & Time Of Harvest</B></th>			
+                <th  align="center"  width="11%" <B>TPC Cfu/ gm @37°C</B></th>
+                
+                
+    
+               </tr> 
+			   
+			  </table>

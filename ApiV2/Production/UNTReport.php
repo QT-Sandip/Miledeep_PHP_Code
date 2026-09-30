@@ -1,0 +1,61 @@
+<?php
+include_once '../Config/Config.php';
+include_once 'Controller/UNTReportController.php';
+
+$database = new Database();
+$restApi = new REST();
+$isValid = false;
+
+$authToken = $restApi->getRequestHeader();
+$RequestBody = $restApi->getRequestBody();
+$RequestMethod = $restApi->get_request_method();
+
+if ($RequestMethod == 'GET') {
+    $data = validateGetData($authToken, $RequestBody);
+} else {
+}
+
+
+if ($data['IsValid']) {
+    $db = $database->getConnection($authToken);
+    if ($db != null) {
+        $Controller = new UNTReportController($db);
+        if ($RequestMethod == 'GET') {
+            $responseData = $Controller->getUNTReportDetails($RequestBody);
+            // echo print_r($responseData);exit;
+        }
+        $responseData = json_encode($responseData);
+        $restApi->response($responseData, 200);
+    }
+} else {
+    $responseData['Error'] = $data['Error'];
+    $responseData['Msg'] = $data['Error'];
+    $responseData = json_encode($responseData);
+    // echo print_r($responseData);exit;
+    $restApi->response($responseData, 200);
+}
+
+
+function validateGetData($authToken, $RequestBody)
+{
+
+    $isValid = false;
+    $error = null;
+
+    if (!isset($authToken) && empty($authToken)) {
+        $error = 'Token Not Found';
+    } else if (!isset($RequestBody['FromDate']) || empty($RequestBody['FromDate'])) {
+        $error = 'FromDate not Found';
+    } else if (!isset($RequestBody['ToDate']) || empty($RequestBody['ToDate'])) {
+        $error = 'ToDate not Found';
+    } else if (isset($RequestBody['IsPlantFilter']) && $RequestBody['IsPlantFilter'] == 1 && (!isset($RequestBody['PlantID']) || empty($RequestBody['PlantID']))) {
+        $error = 'PlantID not Found';
+    } else {
+        $isValid = true;
+    }
+
+    $Data['Error'] = $error;
+    $Data['IsValid'] = $isValid;
+
+    return $Data;
+}

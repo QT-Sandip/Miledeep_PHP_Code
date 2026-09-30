@@ -1,0 +1,365 @@
+body {
+    color: #000000;
+    font-weight: 600;
+}
+.maxWidth {
+    max-width: 1400px;
+    margin: 0px auto;
+}
+
+/* Template Modifications */
+    
+/* END */
+
+
+
+
+
+select.error + .select2-container,
+input.error,
+textarea.error,
+input.error:focus,
+textarea.error:focus {
+    border: 1px solid red;
+}
+
+.table td {
+    padding-left: 10px !important;
+    padding-right: 10px !important;
+}
+.table th {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+    text-indent: 5px;
+}
+
+.complete {
+    width: 70px;
+    background: Green !important;
+    color: white;
+}
+.pending {
+    width: 70px;
+    background: red !important;
+    color: white;
+}
+
+.cellCheckbox:before,
+.cellCheckbox:after {
+    display: none !important;
+}
+
+table thead td,
+table thead th {
+    border-bottom-width: 2px;
+}
+
+table td,
+table th {
+    border: 1px solid #dee2e6;
+}
+.form-control[readonly] {
+    background: #e2e2e2;
+}
+/* Index page Pending Order Popup CSS */
+@media (min-width: 992px) {
+    /* #myModalFullScreen .modal-lg, .modal-xl {
+        max-width: 90%;
+        max-height: 210px;
+    } */
+}
+@media (min-width: 576px) {
+    .modal-dialog.modal-fullscreen {
+        max-width: 100%;
+        margin: 0px;
+    }
+}
+.fullscreen-enable.modal-open{
+    overflow: hidden;
+}
+
+#myModalFullScreen.modal .modal-body table#key-datatableFullscreen {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 0px !important;
+}
+
+#myModalFullScreen.modal .modal-body #key-datatableFullscreen thead th {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+#myModalFullScreen.modal .modal-body div#key-datatableFullscreen_wrapper .row:nth-child(2) {
+    overflow: auto;
+    height: 80vh;
+    
+}
+/* END */
+
+/* Model popup css */
+
+.modal .modal-body table#key-datatable {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 0px !important;
+}
+
+.modal .modal-body #key-datatable thead th {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+.modal .modal-body div#key-datatable_wrapper .row:nth-child(2) {
+    overflow: auto;
+    height: 380px;
+}
+/* END */
+
+.table .thead-light th {
+    color: #000000;
+}
+.table td,
+.table th {
+    color: #000000;
+    font-size: 14px;
+}
+.table tr:hover {
+    background: #21364c !important;
+}
+.table tr:hover th {
+    /* color :#FFFFFF; */
+}
+.table tr:hover td, .table tfoot tr:hover th {
+    color: #ffffff !important;
+}
+#key-datatableFullscreen.table tr:hover td {
+    color: #ffffff;
+}
+ .table tr:hover .fullname{
+    color: #FFFFFF !important;
+ }
+/* END */
+
+div#tblGrid_wrapper .row:nth-child(2) {
+    overflow: auto;
+    height: 570px;
+}
+
+table#tblGrid {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 0px !important;
+}
+
+#tblGrid thead th {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+}
+
+#tblGrid.dataTable.nowrap th,
+#tblGrid.dataTable.nowrap td {
+    white-space: normal;
+}
+
+#tblGrid .btnActions {
+    border: none;
+    background: none;
+    padding: 0px 2px;
+}
+
+button#loadAll {
+    background: #dbdbdb;
+    color: #000000 !important;
+    padding: 5px 10px;
+}
+
+/* insurance page list checkbox  */
+.big-checkbox {
+    width: 16px;
+    height: 16px;
+}
+
+/* Table Fixed header and Vertical Scroll */
+
+table#tblData {
+    margin-top: 0px !important;
+}
+
+/* #tblData thead th {
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+div#tblData_wrapper .row:nth-child(2){
+  overflow: auto;
+  height: 400px;
+} */
+
+/* */
+
+.dataTables_scrollBody th {
+    padding: 0px !important;
+}
+
+table.dataTable thead .sorting:before,
+table.dataTable thead .sorting_asc:before,
+table.dataTable thead .sorting_asc_disabled:before,
+table.dataTable thead .sorting_desc:before,
+table.dataTable thead .sorting_desc_disabled:before {
+    top: 2px;
+    right: -2px;
+}
+table.dataTable thead .sorting:after,
+table.dataTable thead .sorting_asc:after,
+table.dataTable thead .sorting_asc_disabled:after,
+table.dataTable thead .sorting_desc:after,
+table.dataTable thead .sorting_desc_disabled:after {
+    top: 8px;
+    right: -2px;
+}
+
+input[type="text"]:disabled {
+    background: #eeeeee;
+}
+
+/* General Columns sticky */
+.sticky {
+    position: sticky !important;
+    z-index: 9;    
+    border: 1px solid #dee2e6;
+}
+
+td.sticky{
+    background: #FFFFFF !important;
+}
+
+.table tr:hover td.sticky{
+    background: #21364c !important;
+    color: #ffffff !important;
+}
+
+.sticky.etaStatusCol1{
+    left: -1px;
+}
+
+.sticky.etaStatusCol2{
+    left: 44px;
+}
+.sticky.etaStatusCol3{
+    left: 189px;
+}
+
+.shipLineWiseRpt1 {
+    left: -1px;
+}
+.shipLineWiseRpt2 {
+    left: 45px;
+}
+.shipLineWiseRpt3 {
+    left: 200px;
+}
+.shipLineWiseRpt4 {
+    left: 381px;
+}
+/* END */
+.colhead-wrap th{
+    white-space: wrap;
+}
+.btnExcelDataTable{
+    background-color: #1cbb8c;
+    border-color: #1cbb8c;
+}
+.btnExcelDataTable:hover{
+    color: #fff;
+    background-color: #179a73;
+    border-color: #158f6b;
+}
+#key-datatable_wrapper .dt-buttons.btn-group.flex-wrap,
+.dt-buttons.btn-group.flex-wrap{
+    float: right;
+    margin-top: -5px;
+    margin-left: 15px;
+}
+.etdEtaReportCol1{
+    left: -1px;
+}   
+.etdEtaReportCol2{
+    left: 44px;
+}   
+
+.sno{
+    left: -1px;
+}
+.invNo{
+    left: 60px;
+}
+
+.aPrint {
+    display: block;
+    width: 49px;
+    float: left;
+    background: #e0e0e0;
+    color: #000000 !important;
+    border-radius: 10px;
+    text-align: center;
+    border: 0px;
+    height: 42px;
+}
+.aPrint span{
+    position: relative;
+    top: -4px;
+}
+th.sticky{
+    z-index: 9991 !important;
+}
+td.sticky{
+    z-index: 99;
+}
+.sticky.sno{
+    left: -1px;
+}
+.sticky.buyer{
+    left: 49px;
+}
+.sticky.destination {
+    left: 268px;
+}
+
+.sticky.shipment{
+    left: 412px;
+}
+.sticky.pono{
+    left: 526px;
+}
+.popOnwaterID{
+    left: 49px;
+}
+.popOnwaterInvNo{
+    left: 109px;
+}
+.popOnwaterBuyer{
+    left: 255px;
+}
+.popOnwaterPoNo{
+    left: 435px;
+}
+.pndPayInvNo{
+    left: 49px;
+}
+.pndPayPoNo{
+    left: 182px;
+}
+
+
+#preloader{
+    background-color: rgb(0 0 0 / 65%);
+}
+.spinner .spin-icon{
+    color: #FFFFFF;
+}
+#worker-type-select{display: none;}
+#worker-batch-select{display: none;}
+#worker-section-select{display: none;}
+#worker-village-select{display: none;}
+.hide-emp-field{display: none;}

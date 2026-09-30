@@ -1,0 +1,20 @@
+<svg width="110" height="200" viewBox="0 0 110 200" xmlns="http://www.w3.org/2000/svg">
+  <g fill="none" stroke="#555" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Rounded container -->
+    <rect x="8" y="8" width="94" height="184" rx="20"></rect>
+
+    <!-- Door (right oriented) -->
+    <line x1="70" y1="40" x2="70" y2="130"></line>
+    <line x1="32" y1="40" x2="70" y2="40"></line>
+
+    <!-- Person -->
+    <circle cx="54" cy="70" r="10"></circle>
+    <line x1="54" y1="80" x2="54" y2="120"></line>
+    <line x1="54" y1="90" x2="38" y2="108"></line>
+    <line x1="54" y1="90" x2="70" y2="108"></line>
+    <line x1="54" y1="120" x2="40" y2="150"></line>
+    <line x1="54" y1="120" x2="68" y2="150"></line>
+
+  </g>
+</svg>

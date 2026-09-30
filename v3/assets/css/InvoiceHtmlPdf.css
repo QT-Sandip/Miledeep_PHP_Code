@@ -1,0 +1,158 @@
+@media print {
+    @page {
+        size: A4;
+        margin: 10; 
+    }
+    .generate{
+        display: none;
+    }
+}
+body{
+    font-family: "Helvetica";
+    font-size: 14px;
+}
+h1{
+    font-size: 16px;
+}
+table td, table th{
+    border: initial;
+}
+
+.generate{
+    cursor: pointer;
+    border: 0px;
+    background: #1a996a;
+    color: #FFFFFF;
+    padding: 10px 15px;
+    font-weight: bolder;
+    font-size: 14px;
+}
+.tblMain{
+    width: 980px; 
+    /* width: 595px;  */
+    margin: 0 auto;
+}
+table{
+    border-collapse: collapse;
+    border: 0px !important;
+    color: #000000;
+}
+td{
+    padding: 5px;
+    vertical-align: top;
+}
+.w50{
+    width: 50%
+}
+.w100{
+    width: 100%;
+}
+.d-block{
+    display: block;
+}
+.p-0{
+    padding: 0px;
+}
+.mb-3{
+    margin-bottom: 3px;
+}
+.bt0{
+    border-top: 0px;
+}
+.bl0{
+    border-left: 0px;
+}
+.bb0{
+    border-bottom: 0px;
+}
+.br0{
+    border-right: 0px;
+}
+.bt2{
+    border-top: 2px solid #000000 !important;
+}
+.br2{
+    border-right: 2px solid #000000 !important;
+}
+.bb2{
+    border-bottom: 2px solid #000000 !important;
+}
+.bl2{
+    border-left: 2px solid #000000 !important;
+}
+
+.bt{
+    border-top: 1px solid #000000 !important;
+}
+.br{
+    border-right: 1px solid #000000 !important;
+}
+.bb{
+    border-bottom: 1px solid #000000 !important;
+}
+.bl{
+    border-left: 1px solid #000000 !important;
+}
+.f-8{
+    font-size: 8px;
+}
+.f-10{
+    font-size: 10px;
+}
+.f-12{
+    font-size: 12px;
+}
+.f-13{
+    font-size: 13px;
+}
+.f-14{
+    font-size: 14px;
+}
+.f-15{
+    font-size: 15px;
+}
+.f-16{
+    font-size: 16px;
+}
+.f-17{
+    font-size: 17px;
+}
+.f-18{
+    font-size: 18px;
+}
+.bold{
+    font-weight: 600;
+}
+.bolder{
+    font-weight: bolder;
+}
+.page-title{
+    text-align: center;
+    font-size: 18px;
+}
+.text-center{
+    text-align: center;
+}
+.text-left{
+    text-align: left !important;
+}
+.visible-hide{
+    visibility: hidden;
+}
+.trBreakUpHeader th{
+    padding: 7px 5px;
+}
+#printTable{
+    margin: auto;
+    max-width: 1040px;
+    padding: 0px 30px;
+}
+/* .tblHeader{
+
+}
+.tblBody{
+
+}
+.tblFooter{
+
+} */

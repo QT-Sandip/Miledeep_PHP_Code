@@ -1,0 +1,53 @@
+        
+            <table id="tblDataTable" class="table table-hover table-bordered">
+            <!-- <table id="tblDataTable" border="1" class="table table-hover table-bordered"> -->
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 40px">S.No</th>
+                        <th style="min-width: 120px;width: 120px;">PoNo</th>
+                        <th style="min-width: 200px;width: 200px;">Vendor</th>
+                        <!--  -->
+                        <th style="min-width: 120px;width: 120px;">PSIP ID</th>
+                        <th style="min-width: 180px;width: 180px;">Product</th>
+                        <th style="min-width: 120px;width: 120px;">PSIP Sent Date</th>
+                        <th style="min-width: 120px;width: 120px;">Shipment Date</th>
+                        <th style="min-width: 120px;width: 120px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                            <tr>
+                            <td colspan="8" style=" text-align: center"><b>CAMARO CONSIGNEE1</b></td>
+                        </tr>
+                                                    <tr>
+                                <td>1</td>
+                                <td>po1</td>
+                                <td>PDTO</td>
+                                <td>123TEST123</td>
+                                <td>4J25 - 16/20 - 45</td>
+                                <td>16-11-2024</td>
+                                <td></td>
+                                <td>Not Entered</td>
+                            </tr>
+                                                    <tr>
+                                <td>2</td>
+                                <td>po1</td>
+                                <td>EZPL</td>
+                                <td>123TEST</td>
+                                <td>4J25 - 26/30 - 600</td>
+                                <td>12-11-2024</td>
+                                <td></td>
+                                <td>Not Entered</td>
+                            </tr>
+                                                    <tr>
+                                <td>3</td>
+                                <td>2309</td>
+                                <td>EZPL</td>
+                                <td>234</td>
+                                <td>3B16 - 26/30 - 4500</td>
+                                <td>13-11-2024</td>
+                                <td></td>
+                                <td>Not Entered</td>
+                            </tr>
+                                                            </tbody>
+            </table>
+        

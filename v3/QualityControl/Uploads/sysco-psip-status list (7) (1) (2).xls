@@ -1,0 +1,33 @@
+        
+            <table id="tblDataTable" class="table table-hover table-bordered">
+            <!-- <table id="tblDataTable" border="1" class="table table-hover table-bordered"> -->
+                <thead class="thead-light">
+                    <tr>
+                        <th style="width: 40px">S.No</th>
+                        <th style="min-width: 120px;width: 120px;">PoNo</th>
+                        <th style="min-width: 200px;width: 200px;">Vendor</th>
+                        <!--  -->
+                        <th style="min-width: 120px;width: 120px;">PSIP ID</th>
+                        <th style="min-width: 180px;width: 180px;">Product</th>
+                        <th style="min-width: 120px;width: 120px;">PSIP Sent Date</th>
+                        <th style="min-width: 120px;width: 120px;">Shipment Date</th>
+                        <th style="min-width: 120px;width: 120px;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                                            <tr>
+                            <td colspan="8" style=" text-align: center"><b>CAMARO CONSIGNEE1</b></td>
+                        </tr>
+                                                    <tr>
+                                <td>1</td>
+                                <td>Test Po 1</td>
+                                <td>EZPL</td>
+                                <td>128 PSIPID</td>
+                                <td>4K20 - 16/20 - 500</td>
+                                <td>21-11-2024</td>
+                                <td>22-11-2024</td>
+                                <td>Fail</td>
+                            </tr>
+                                                            </tbody>
+            </table>
+        

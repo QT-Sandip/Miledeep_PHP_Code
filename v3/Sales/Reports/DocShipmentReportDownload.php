@@ -1,0 +1,197 @@
+<?php
+
+session_start();
+
+include ($_SERVER['DOCUMENT_ROOT']."/includes/config.php");
+include ($_SERVER['DOCUMENT_ROOT']."/includes/Globals.php");
+
+ $B_TYPE=$_GET['TYPE'];
+ $BAR_CODE_ID=$_GET['BID'];
+ $LOT_ID=$_GET['ID'];
+
+$Year=$_GET['Year'];
+ $Exporter=$_GET['Exporter'];	
+
+if($Year!=''){
+ $from_date=$Year.'-04-01'; 
+$YearEnd=$Year+1;
+$to_date=$YearEnd.'-03-31';
+}
+else{
+$from_date=$_GET['from_date']; 
+  $to_date=$_GET['to_date']; 
+}
+   
+if($Exporter==''){
+	$Query='';
+}
+else{
+if($Exporter==1){
+	//$Query='and SPD.ExporterID!=5';
+	$Query='WHERE SPD.ExporterID!=5';
+}
+	else{
+	
+	//$Query=' and SPD.ExporterID='.$Exporter;
+	$Query=' WHERE SPD.ExporterID='.$Exporter;
+	}
+	 $SqlExporter="SELECT * FROM $TblAdminExporterDetails where ExpID=$Exporter"; 
+				  $StmtExporter=$iconn->query($SqlExporter);
+
+$RowExporter= $StmtExporter->fetch_array();	
+			 $ExporterName=$RowExporter['ExpName'];
+	  
+}
+
+$file_name='Shipment Report -'.$from_date.'-'.$to_date.'.xlsx';
+
+		$date_end=$to_date.' 23:59:59';  
+	
+	
+		
+	$SqlPo="SELECT * FROM `$ScrmCustomInvoices` as SCI 
+	 LEFT JOIN $TblScrmPIData as SPD on SPD.PoID=SCI.PiID
+	  left JOIN $ScrmShipmentDetails as SSD on SSD.PiID=SCI.PiID
+
+LEFT JOIN $TblScrmConsigneeDetails as SCD on SCD.ConID=SPD.ConsigneeID	 
+LEFT JOIN $TblAdminExporterDetails as AED on AED.ExpID=SPD.ExporterID	 
+	  $Query  order by CInvNo Asc,CInvDate Asc"; 
+			  $StmtPo=$iconn->query($SqlPo);
+	
+
+	
+			 
+			  
+
+	
+ 
+	$content='';
+
+
+	$size=40;	 
+ 
+	$size1=60;	
+
+
+
+			  	
+			  
+			  $S_NO=1;
+			  $width=11;
+			  $width_s=8;
+			  $width_w=$width+5;
+              
+			    $content .= '
+				<h3 align="center">'.$ExporterName.'</h3>
+			  <h3 align="center"> Shipment Report ( '.date('d-M-Y',strtotime($from_date)).' to  '.date('d-M-Y',strtotime($to_date)).' )</h3>
+			  
+			  
+			  <table border="1" cellspacing="0" cellpadding="5">
+			   <tr>  
+
+           		
+
+              <th  align="center"  width="3%"><B>S No.</B></th>           
+				 
+			
+				<th  align="center" width="'.$width_s.'%" ><B>PLANT</B></th>
+				<th  align="center"  width="'.$width.'%"><B>UNIT</B></th>	
+				   <th  align="center"  width="'.$width_s.'%"><B>PO#</B></th>					   
+				   <th  align="center"  width="'.$width_s.'%"><B>PRODUCT</B></th>					   
+				   <th  align="center"  width="'.$width.'%"><B>BRAND</B></th>			
+				   <th  align="center"  width="'.$width.'%"><B>STOCK STATUS</B></th>			
+				   <th  align="center"  width="'.$width.'%"><B>DESTINATION</B></th>			
+                <th  align="center"  width="'.$width.'%" <B>BUYER INSPECTION STATUS</B></th>
+                <th  align="center"  width="'.$width.'%" <B>LAB RESULTS STATUS</B></th>
+                <th  align="center"  width="'.$width.'%" <B>LOADING INDENT STATUS</B></th>
+                <th  align="center"  width="'.$width.'%" <B>BOOKED CONTAINERS </B></th>
+                <th  align="center"  width="'.$width.'%" <B>VEHICLE STATUS</B></th>
+                <th  align="center"  width="'.$width.'%" <B>CONTAINER BOOKED</B></th>
+                <th  align="center"  width="'.$width.'%" <B>REMARKS</B></th>
+                
+                
+    
+               </tr> 
+			   
+			  '; 
+			  
+	
+		//	
+$TotalFOBUS=0;
+$TotalFOB=0;
+$GrandTotalDiscount=0;
+$TotalNetWgtKgs=0;
+$TotalNetWgtLbs=0;
+
+		while($RowPo = $StmtPo->fetch_array()){
+			$Plant=explode('/',$RowPo['InvShortCode']);
+			$PoID=$RowPo['PoID'];
+			$ProcessorID=$RowPo['ProcessorID'];
+			if($ProcessorID==1){
+			$Unit='1';	
+			}
+			else{
+				$Unit='2';
+			}
+			
+			$AryShortName=array();
+			$AryGrades=array();
+			 $SqlVariety="SELECT * FROM `$TblScrmPoGradeData` SPDT LEFT join 
+			$ScrmPIVarietyList  PIL on SPDT.VarietyID=PIL.VarietyID LEFT join 
+			$TblAdminPackingStyles  APS on SPDT.PackingStyleID=APS.PCKID WHERE InvId='$PoID'"; 
+			$Stmtvariety=$iconn->query($SqlVariety);
+			
+						while($RowVariety=$Stmtvariety->fetch_array()){
+
+	$AryShortName[]=$RowVariety['ShortName'];
+	$AryGrades[]=$RowVariety['Grade'];
+	$Brand=$RowVariety['Brand'];
+						}
+						$Grades=implode(",",array_unique($AryGrades));
+						//$Grades=implode(",",array_unique(explode(",",$Grades)));
+                        $ShortName=implode(",",array_unique($AryShortName)); 
+						$Product=$ShortName.' '.$Grades;
+
+		    $content .= 
+					
+					'<tr>
+				<th  align="center" width="3%">'.$S_NO.'</th>
+
+			
+				  <th  align="center" width="'.$width.'%">'.$Plant[0].'</th>
+
+				 <th  align="center" width="'.$width_s.'%">'.$Unit.'</th>
+				 				 <th  align="center" width="'.$width_s.'%">'.$RowPo['PoNo'].'</th>
+
+				 <th  align="center" width="'.$width.'%">'.$Product.'</th>
+				 <th  align="center" width="'.$width.'%">'.$Brand.'</th>
+				
+
+				 <th  align="center" width="'.$width.'%"></th>
+				 <th  align="center" width="'.$width.'%"></th>
+				 <th  align="center" width="'.$width.'%"></th>
+				 <th  align="center" width="'.$width.'%" ></th>
+				 <th  align="center" width="'.$width.'%" ></th>
+				 <th  align="center" width="'.$width.'%" ></th>
+				 <th  align="center" width="'.$width.'%" ></th>
+				 <th  align="center" width="'.$width.'%" ></th>
+				 <th  align="center" width="'.$width.'%" ></th>
+				 
+				  
+				 </tr>';
+
+ $S_NO++;			 
+}
+
+
+
+		$content .= '</table>';
+
+$filename='DocShipmentReport -'.$from_date.'-'.$to_date.'.xls';
+
+		header("Content-Type: application/xls");
+			header("Content-Disposition: attachment; filename=".$filename."");
+	echo $content;	
+
+
+?>

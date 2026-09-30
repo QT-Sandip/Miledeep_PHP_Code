@@ -1,0 +1,27 @@
+03/05/2023:
+
+1.clone   -->  git clone <Repo path>
+2.to move project folder --> cd <folder name>
+3.check git status  --> git status
+
+4.add file to repo --> git add .
+5.commit --> git commit -m "commit message"
+6.push  --> git push origin <branch name>
+
+04/05/2023:
+
+7.create new branch --> git branch <branckname>
+8.switch to new branch  --> git checkout <newbranchname>
+
+9.merge two branches  at github and pull data from git-->
+--> first switch to respected branch then 
+--> git pull origin <branchname>
+
+10.merge two branches at local -->
+--> first switch to respected branch then 
+--> git merge <branchname>
+then update this changes to git, run  command
+--> git push <branchname>
+ex: if we want to merge m2-> m1, then first switch to branch m1 and then run command "git merge m2" then 
+git push m1
+

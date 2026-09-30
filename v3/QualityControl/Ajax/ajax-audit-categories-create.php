@@ -1,0 +1,25 @@
+<?php
+
+// ini_set('display_errors', 1);
+// ini_set('display_startup_errors', 1);
+// error_reporting(E_ALL);
+
+include_once $_SERVER['DOCUMENT_ROOT'] . '/config/global.php';
+include_once ROOT . 'config/api-call.php';
+
+$api = API_AUDIT_CATEGORIES;
+
+$bodyContentPost = array(
+	"AuditID" => trim($_POST["auditID"]),
+	"CategoryName" =>trim($_POST["categoryName"]),
+	"Status" => trim($_POST["status"]),
+	//"PlantID" => trim($_POST["arrivalPlant"]),
+	"AuditCertificationNo" => trim($_POST["certificationNumber"]),
+);
+$result = callAPI($api, "POST", "", $bodyContentPost);
+
+// echo json_encode($result, JSON_PRETTY_PRINT);
+// exit;
+
+header('Content-Type: application/json');
+echo json_encode($result);

@@ -1,0 +1,298 @@
+<?php
+/*ini_set( 'display_errors', 1 );
+error_reporting( E_ALL ); */
+$PageTitle = "Rm Analysis Reports";
+$PageTitleFolder = "Quality Control";
+
+include($_SERVER['DOCUMENT_ROOT'] . "/includes/config.php");
+include($_SERVER['DOCUMENT_ROOT'] . "/includes/Globals.php");
+
+$uid = $_SESSION['r_id'];
+
+$CurrentMonth = date('m');
+
+if ($CurrentMonth > 3) {
+    $FinClsYear = $Currentyear + 1;
+} else {
+    $FinClsYear = $Currentyear;
+}
+
+
+?>
+
+<!doctype html>
+<html lang="en">
+<link href="https://serp.silverlights.in/Clients/Jlsf/User.css" rel="stylesheet" type="text/css" />
+
+<head>
+
+    <?php include($IncludesPath . "title-meta.php"); ?>
+
+    <!-- DataTables -->
+    <link href="<?php echo $BaseDist ?>assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $BaseDist ?>assets/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $BaseDist ?>assets/libs/datatables.net-select-bs4/css//select.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Responsive datatable examples -->
+    <link href="<?php echo $BaseDist ?>assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+
+    <link href="<?php echo $BaseDist ?>assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <link href="<?php echo $BaseDist ?>assets/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="<?php echo $BaseDist ?>assets/libs/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="<?php echo $BaseDist ?>assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <?php include($IncludesPath . "head-css.php"); ?>
+
+</head>
+
+<body data-sidebar="dark">
+
+    <?php include($IncludesPath . "PreLoader.php"); ?>
+
+
+
+    <!-- Begin page -->
+    <div id="layout-wrapper">
+
+        <?php
+        include($IncludesPath . "topbar.php");
+        include($IncludesPath . "sidebar.php");
+        ?>
+
+        <!-- ============================================================== -->
+        <!-- Start right Content here -->
+        <!-- ============================================================== -->
+        <div class="main-content">
+
+            <div class="page-content">
+                <div class="container-fluid">
+
+                    <?php include($IncludesPath . "page-title.php"); ?>
+                    <?php include "PopUpTable.php"; ?>
+
+
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body">
+
+
+
+
+                                    <div class="row">
+
+
+
+
+                                        <div class="form-group col-sm-2">
+                                            <label>Select Year </label>
+                                            <select class="form-control select2" name="YEAR" id="YEAR">
+
+                                                <?php
+
+                                                //for($year; $Startyear <= $Currentyear; $Startyear++) { 
+                                                for ($year; $Startyear <= $endYear; $Startyear++) {
+                                                    //$year=($Startyear-1).'-'.($Startyear);
+                                                ?>
+
+                                                    <option <?php if ($Startyear == $Currentyear) {
+                                                                echo 'selected="selected"';
+                                                            } ?> value="<?php echo $Startyear ?>"><?php echo $Startyear ?></option>
+
+                                                    <!-- value="<?php echo $Startyear ?>"><?php echo $Startyear ?></option>-->
+
+                                                <?php  }
+
+                                                ?>
+                                                <select>
+                                        </div>
+
+
+
+                                        <div class="col-lg-3">
+
+                                            <div class="form-group">
+                                                <label>Select Month</label>
+                                                <select class="form-control select2" name="MONTH" id="MONTH" size='1'>
+                                                    <?php
+
+                                                    $start = strtotime('first day of this month');
+                                                    for ($i = 0; $i < 12; $i++) {
+                                                        $time = strtotime(sprintf('%d months', $i), $start);
+
+                                                        $label = date('F', $time);
+                                                        $value = date('m', $time);
+                                                        echo "<option value='$value'>$label</option>";
+                                                    }
+
+
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-xs-12" align="center">
+                                        <!-- <p><br></p> -->
+                                        <button id="list" align="right" type="button" class="btn btn-primary waves-effect waves-light">
+                                            Search <i class="ri-arrow-right-line align-middle ml-2"></i>
+                                        </button>
+
+
+                                    </div>
+
+
+                                    <!--     <a href="EmployeeCreate.php" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-plus"></i> New Employee</a>-->
+
+
+                                </div>
+                                <!-- end row -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- end col -->
+                </div> <!-- end row -->
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-body" id="POList">
+                                    <!--<h4 class="card-title">Proforma Invoice List</h4>-->
+
+
+                                </div> <!-- end card body-->
+                            </div> <!-- end card -->
+                        </div><!-- end col-->
+                    </div>
+                </div>
+                <!-- end row-->
+
+
+            </div> <!-- end card body-->
+        </div> <!-- end card -->
+    </div><!-- end col-->
+    </div>
+    <!-- end row-->
+
+    </div> <!-- container-fluid -->
+    </div>
+    <!-- End Page-content -->
+
+    <?php include($IncludesPath . "footer.php"); ?>
+
+    </div>
+    <!-- end main content-->
+
+    </div>
+    <!-- END layout-wrapper -->
+
+
+
+    <?php include($IncludesPath . "vendor-scripts.php"); ?>
+
+
+    <!-- Required datatable js -->
+    <script src="<?php echo $BaseDist ?>assets/libs/select2/js/select2.min.js"></script>
+
+    <script src="<?php echo $BaseDist ?>assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/bootstrap-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/bootstrap-touchspin/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/bootstrap-maxlength/bootstrap-maxlength.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/js/pages/form-advanced.init.js"></script>
+
+
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <!-- Buttons examples -->
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/jszip/jszip.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/pdfmake/build/pdfmake.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/pdfmake/build/vfs_fonts.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-keytable/js/dataTables.keyTable.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-select/js/dataTables.select.min.js"></script>
+
+    <!-- Responsive examples -->
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="<?php echo $BaseDist ?>assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+    <!-- Datatable init js -->
+    <script src="<?php echo $BaseDist ?>assets/js/pages/datatables.init.js"></script>
+
+    <script src="<?php echo $BaseDist ?>assets/js/app.js"></script>
+    
+    <Script>
+        $('document').ready(function() {
+
+            $(function() {
+                $('#list').click(function() {
+
+                    var MONTH = $('#MONTH').val();
+                    var YEAR = $('#YEAR').val();
+                    var TYPE = '<?php echo   $TYPE ?>';
+
+                    $.ajax({
+                        url: 'Ajax/AjaxRm_analysis.php',
+                        type: 'POST',
+                        data: {
+                            'YEAR': YEAR,
+                            'MONTH': MONTH,
+                            'TYPE': TYPE
+                        },
+                        success: function(data) {
+                            showData(data);
+                        }
+                    });
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).on("click", "a.nav-link.dropdown-toggle", function() {
+            $(this).next("ul.dropdown-menu, div.dropdown-menu").toggleClass("show");
+        });
+    </script>
+
+    <script>
+        function showData(data) {
+            $("#POList").html(data);
+            var table = $('#key-datatable').DataTable({
+                scrollY: "600px",
+                scrollX: true,
+                //sScrollX: "100%",
+                sScrollXInner: "100%",
+                // scrollCollapse:true,
+                paging: true,
+                destroy: true,
+                fixedColumns: true,
+                bSort: true,
+                "bStateSave": true,
+                "fnStateSave": function(oSettings, oData) {
+                    localStorage.setItem('key-datatable', JSON.stringify(oData));
+                },
+                "fnStateLoad": function(oSettings) {
+                    return JSON.parse(localStorage.getItem('key-datatable'));
+                },language: {
+                lengthMenu: "Show _MENU_ records",
+                paginate: {
+                    previous: "<i class='mdi mdi-chevron-left'>",
+                    next: "<i class='mdi mdi-chevron-right'>"
+                }
+            },
+            drawCallback: function () {
+                $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
+            },
+            dom: '<"row mb-2"<"col-md-6 d-flex align-items-center"lf><"col-md-6 d-flex justify-content-end"B>>rtip',
+            buttons:[],
+            });
+        }
+    </script>
+</body>
+
+</html>

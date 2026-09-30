@@ -1,0 +1,50 @@
+ <table id="tblDataTable" class="table table-hover table-bordered dataTable no-footer" style="width: 100%;"><thead class="thead-light">
+                    <tr style="height: auto; border: 1px solid rgb(239, 242, 247);"><th style="width: 183.984px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: auto;" class="sorting_disabled" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: auto; overflow: hidden;">S.No</div></th><th style="min-width: 120px; width: 266.016px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: auto;" class="sorting_disabled" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: auto; overflow: hidden;">Traceability</div></th><th style="min-width: 120px; width: 266.016px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: auto;" class="sorting_disabled" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: auto; overflow: hidden;">Tonnage</div></th><th style="min-width: 120px; width: 266.016px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: auto;" class="sorting_disabled" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: auto; overflow: hidden;">Balance</div></th><th style="min-width: 120px; width: 269.023px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: auto;" class="sorting_disabled" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: auto; overflow: hidden;">Plant</div></th><th style="min-width: 120px; width: 269.102px; padding-top: 0px; padding-bottom: 0px; border-top-width: 0px; border-bottom-width: 0px; height: auto;" class="sorting_disabled" rowspan="1" colspan="1"><div class="dataTables_sizing" style="height: auto; overflow: hidden;">Utilized Quantity</div></th></tr>
+                </thead>
+                
+                <tbody>
+                                            
+                                            
+                                            
+                                    <tr class="odd" style="border: 1px solid rgb(239, 242, 247);">
+                            <td style="width: 80px; border: 1px solid rgb(239, 242, 247);">1</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">343543</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">35.000</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">35</td>
+                            <td style="padding: 0px !important; border: 1px solid rgb(239, 242, 247);" colspan="2">
+                                <table class="subTable table table-bordered mb-0" style="width: 100%">
+                                                                    </table>
+                            </td>
+                            <td style="display: none; border: 1px solid rgb(239, 242, 247); visibility: hidden;"></td>
+                        </tr><tr class="even" style="border: 1px solid rgb(239, 242, 247);">
+                            <td style="width: 80px; border: 1px solid rgb(239, 242, 247);">2</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">TEST0001</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">45.000</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">-24612.08</td>
+                            <td style="padding: 0px !important; border: 1px solid rgb(239, 242, 247);" colspan="2">
+                                <table class="subTable table table-bordered mb-0" style="width: 100%">
+                                                                            <tbody><tr style="border: 1px solid rgb(239, 242, 247);">
+                                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">-</td>
+                                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">3132.600</td>
+                                        </tr>
+
+                                                                            <tr style="border: 1px solid rgb(239, 242, 247);">
+                                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">CMO-BVRM</td>
+                                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">21524.480</td>
+                                        </tr>
+
+                                                                    </tbody></table>
+                            </td>
+                            <td style="display: none; border: 1px solid rgb(239, 242, 247); visibility: hidden;"></td>
+                        </tr><tr class="odd" style="border: 1px solid rgb(239, 242, 247);">
+                            <td style="width: 80px; border: 1px solid rgb(239, 242, 247);">3</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">TestTraceabil</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">0.000</td>
+                            <td style="min-width: 120px; width: 120px; border: 1px solid rgb(239, 242, 247);">0</td>
+                            <td style="padding: 0px !important; border: 1px solid rgb(239, 242, 247);" colspan="2">
+                                <table class="subTable table table-bordered mb-0" style="width: 100%">
+                                                                    </table>
+                            </td>
+                            <td style="display: none; border: 1px solid rgb(239, 242, 247); visibility: hidden;"></td>
+                        </tr></tbody>
+            </table>

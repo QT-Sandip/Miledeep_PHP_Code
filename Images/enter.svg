@@ -1,0 +1,30 @@
+<svg width="140" height="300" viewBox="0 0 140 300" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- Outer container -->
+  <rect x="10" y="10" width="120" height="280" rx="28" fill="#22C55E"></rect>
+
+  <!-- Inner white panel -->
+  <rect x="22" y="28" width="96" height="170" rx="20" fill="#FFFFFF"></rect>
+
+  <!-- Modern mono-line walk icon -->
+  <g stroke="#1F2937" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <circle cx="70" cy="70" r="11"></circle>
+    <path d="M70 82 L70 124"></path>
+    <path d="M70 98 L52 116"></path>
+    <path d="M70 98 L88 116"></path>
+    <path d="M70 124 L56 160"></path>
+    <path d="M70 124 L84 160"></path>
+  </g>
+
+  <!-- Arrow button -->
+  <rect x="35" y="208" width="70" height="55" rx="14" fill="#FFFFFF" stroke="#1F2937" stroke-width="3"></rect>
+
+  <!-- Arrow icon -->
+  <path d="M50 236 L90 236 M78 225 L90 236 L78 247" stroke="#1F2937" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+
+  <!-- ENTER label -->
+  <text x="70" y="286" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="22" fill="#FFFFFF" letter-spacing="2">
+    ENTER
+  </text>
+
+</svg>

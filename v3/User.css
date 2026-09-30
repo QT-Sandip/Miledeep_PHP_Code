@@ -1,0 +1,50 @@
+<style>
+label {
+    font-size: 15px;
+    color: black;
+}
+
+</style>
+
+<style>
+th {
+    font-size: 12px;
+}
+
+/*
+.table tr:hover {
+  background-color: #343a40 !important;
+  color: #fff !important;
+}
+
+*/
+
+
+.table td, .table th {
+	 font-size: 12px;
+    padding: 7px !important;
+    vertical-align: top;
+    border-top: 1px solid #eff2f7;
+}
+
+.customWrap {
+	white-space : nowrap !important;
+}
+
+		.warning-row {
+            background-color: #f7ff84 !important;
+            color: #111;
+            font-weight: 500 !important;
+        }
+        
+        .success-row {
+            background-color: #fff !important;
+        }
+        
+        .deadline-row {
+            background-color: #df411d !important;
+            color: #ffffff !important;
+            font-weight: 500 !important;
+        }
+
+</style>

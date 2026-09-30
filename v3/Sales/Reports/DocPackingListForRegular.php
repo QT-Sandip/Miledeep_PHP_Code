@@ -1,0 +1,1463 @@
+<?php
+
+function getHeaderTable($iconn, $ID)
+{
+	//	include ($_SERVER['DOCUMENT_ROOT']."/includes/config.php");
+	global $AryData, $style, $PType, $AryLables, $ExporterPrefix;
+
+	$content = '';
+
+
+	$size = 45;
+	$size1 = 55;
+
+
+
+
+
+
+	$ExporterID = $AryData['ExporterID'];
+	$ExporterName = $AryData['ExporterName'];
+	$ExporterAddress = $AryData['ExporterAddress'];
+	$ExporterUsfdaNo = $AryData['ExporterUsfdaNo'];
+	$DestinationCountryId = $AryData['DestinationCountryId'];
+	$ExporterIeCode = $AryData['ExporterIeCode'];
+	$ExporterGstNo = $AryData['ExporterGstNo'];
+	$DataLogger = $AryData['DataLogger'];
+	$DataLoggerPositions = $AryData['DataLoggerPositions'];
+	$ShowDataLogger = $AryData['ShowDataLogger'];
+
+
+	$ConsigneeID = $AryData['ConsigneeID'];
+	$BuyerID = $AryData['BuyerID'];
+	$ConsigneeName = $AryData['ConsigneeName'];
+	$ConsigneeAddress = $AryData['ConsigneeAddress'];
+	$ConsigneeCountry = $AryData['ConsigneeCountry'];
+	$BuyerName = $AryData['BuyerName'];
+	$BuyerAddress = $AryData['BuyerAddress'];
+
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$FinalDestination = $AryData['FinalDestination'];
+	$VesselNumber = $AryData['VesselNumber'];
+	$DestinationCountryName = $AryData['DestinationCountryName'];
+	$OrgVesselName = $AryData['OrgVesselName'];
+	$OrgVOYNO = $AryData['OrgVOYNO'];
+
+
+	$ShowCWiseLc = $AryData['ShowCWiseLc'];
+	$ShowCWiseLcDate = $AryData['ShowCWiseLcDate'];
+	$ShowCWiseLcIssuedBy = $AryData['ShowCWiseLcIssuedBy'];
+	$ShowCWiseWeightPerctText = $AryData['ShowCWiseWeightPerctText'];
+	$ShowCWiseNotifyPrty = $AryData['ShowCWiseNotifyPrty'];
+
+
+	$InvNo = $AryData['InvNo'];
+	$InvDate = $AryData['InvDate'];
+	$PoNo = $AryData['PoNo'];
+	$ReferenceNo = $AryData['ReferenceNo'];
+
+	$PoDate = $AryData['PoDate'];
+	$ShowBank = $AryData['ShowBank'];
+
+	$ProcessorName = $AryData['ProcessorName'];
+	$ProcessorAddress = $AryData['ProcessorAddress'];
+	$ProcessorUsfdaNo = $AryData['ProcessorUsfdaNo'];
+	$ProcessorFEI = $AryData['ProcessorFEI'];
+	$ProcessorApprovalNo = $AryData['ProcessorApprovalNo'];
+
+	$ShowShippingTerms = $AryData['ShowShippingTerms'];
+	$showBuyer = $AryData['showBuyer'];
+	$showImporter = $AryData['showImporter'];
+	$ShowCWiseBuyer = $AryData['ShowCWiseBuyer'];
+	$showNotifyParty = $AryData['showNotifyParty'];
+	$ShippingTerms = $AryData['ShippingTerms'];
+	$ProcessorIeCustomsNo = $AryData['ProcessorIeCustomsNo'];
+	//$ExporterRecAdd=$AryData['ExporterRecAdd'];
+	$NotifyPartyName = $AryData['NotifyPartyName'];
+	$NPartyAddress = $AryData['NPartyAddress'];
+	$NPartyContactNumber = $AryData['NPartyContactNumber'];
+	$ImporterName = $AryData['ImporterName'];
+	$ImporterAddress = $AryData['ImporterAddress'];
+
+	$PaymentTerms = $AryData['PaymentTerms'];
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$PortofLoading = $AryData['PortOfLoading'];
+	$DestinationCountry = $AryData['DestinationCountry'];
+	$DestinationCountry = $AryData['FinalDestinationCountry'] ? $AryData['FinalDestinationCountry'] : $AryData['DestinationCountry'];
+
+	//$PortofLoadingCountry=$AryData['PortofLoadingCountry'];
+	$DeliveryTerms = $AryData['DeliveryTerms'];
+	$ShowDeliveryTerms = $AryData['ShowDeliveryTerms'];
+	$IRNNumber = $AryData['IRNNumber'];
+	$QtyUnit = $AryData['QtyUnit'];
+	$UnitCurrency = $AryData['UnitCurrency'];
+	$TotalMcs = $AryData['TotalMcs'];
+	$ShipByDate = $AryData['ShipByDate'];
+	$SignURL = $AryData['SignURL'];
+	$AuthSign = $AryData['AuthSign'];
+	$PreparedBy = $AryData['PreparedBy'];
+	$BankID = $AryData['BankID'];
+	$Remarks = $AryData['Remarks'];
+	$showRemarks = $AryData['showRemarks'];
+	$showExpUsFda = $AryData['showExpUsFda'];
+	$showExpIECode = $AryData['showExpIECode'];
+	$showExpGSTNo = $AryData['showExpGSTNo'];
+
+	$ShowCWiseApprovalNo = $AryData['ShowCWiseApprovalNo'];
+	$ShowCWiseUsfda = $AryData['ShowCWiseUsfda'];
+	$showProFEI = $AryData['showProFEI'];
+	$ByRoad = $AryData['ByRoad'];
+
+	$ContainerNo = $AryData['ContainerNo'];
+	$SealNo = $AryData['SealNo'];
+	$BLDate = getFormatedDateDMMY($AryData['BLDate']);
+	$SBDate = $AryData['SBDate'];
+	$BLNo = $AryData['BLNo'];
+	$SBNo = $AryData['SBNo'];
+	$ShowBLNo = $AryData['ShowBLNo'];
+	$ShowBLDate = $AryData['ShowBLDate'];
+	$ShowShippingBillnDate = $AryData['ShowShippingBillnDate'];
+	$ShippingBillNo = $AryData['ShippingBillNo'];
+	$ShippingBillDate = (isset($AryData['ShippingBillDate']) && $AryData['ShippingBillDate'] != "") ? date("d-m-Y", strtotime($AryData['ShippingBillDate'])) : "";
+	$ShowShippingDetails = $AryData['ShowShippingDetails'];
+
+	$SqlVarietyHSN = "SELECT HSCode
+							FROM ScrmCIGradeData SCGD
+							LEFT JOIN ScrmPIVarietyList v ON SCGD.`VarietyID`= v.`VarietyID`
+							LEFT JOIN ScrmPreparationMaster spm ON v.PreparationType=spm.ShortCode 
+                    	WHERE HSCode IS NOT NULL AND InvId='$ID' GROUP BY HSCode ORDER BY SCGD.ID ASC";
+	$StmtVarietyHSN = $iconn->query($SqlVarietyHSN);
+	$ResVarietyHSN = mysqli_num_rows($StmtVarietyHSN);
+	$hsnCode = [];
+	while ($VarietyHsnRow = $StmtVarietyHSN->fetch_assoc()) {
+		$HSCode = $VarietyHsnRow['HSCode'];
+		$firstSix = substr($HSCode, 0, 6);
+
+		if (strpos($firstSix, '.') !== false) {
+			$HSCode = substr($HSCode, 0, 7);
+		} else {
+			$HSCode = substr($HSCode, 0, 6);
+		}
+		$hsnCode[] = $HSCode;
+	}
+	$hsnCode = implode(' & ', $hsnCode);
+
+	$content .= $style;
+	$content .= '
+	 
+	 <table border="1" cellspacing="0" cellpadding="0" nobr="true">  ';
+
+	$content .= '	 <tr>
+				 
+				
+				
+				<th width="45%">
+				<table border="1" cellspacing="0" cellpadding="2" nobr="true" >';
+
+	$content .= '
+				
+				<tr>
+				<th  align="LEFT" >   <b>Exporter :</b>
+				<br>' . $ExporterPrefix . $ExporterName . ' 
+				<BR> ' . nl2br($ExporterAddress) . '';
+
+	/* if ($showExpUsFda) {
+		$content .= '	USFDA REGISTRATION NO  : ' . $ExporterUsfdaNo . '<BR>';
+	}
+
+	if ($showExpIECode) {
+		$content .= ' IE CODE  : ' . $ExporterIeCode;
+	}
+
+	if ($showExpGSTNo) {
+		$content .= '<BR> GST NO  : ' . $ExporterGstNo;
+	} */
+
+
+	$content .= '   </th></tr>';
+
+
+
+
+
+
+	$content .= '
+				<tr> 
+				<th  align="LEFT" >   <b><u>Consignee</u></b>
+				<br>' . $ConsigneeName . ',<br>' . nl2br($ConsigneeAddress) . '   </th>
+				</tr>';
+	if ($ShowCWiseNotifyPrty) {
+		if ($showNotifyParty) {
+			$content .= '		<tr>  
+           		
+				<th  align="LEFT" >   <b> <u>Notify Party</u></b>
+				<br>' . $NotifyPartyName . ',<br>' . nl2br($NPartyAddress) . '
+				
+				
+				   </th>
+				</tr>';
+		}
+	}
+	$W_SPACE = '<b style="color:white"> yuhjutgfrtgujkiolmnbvgfgtyhjmnkih</b>';
+	if ($ShowShippingBillnDate && $ShowShippingDetails == '1') {
+		$ShippingDetails = '<tr>
+								<th align="LEFT"> 
+								<b>Shipping Bill No :' . $ShippingBillNo . '</b><br>
+								<b> Shipping Bill Date :' . $ShippingBillDate . '</b>
+								</th>
+							</tr>';
+	} else {
+		$ShippingDetails = "";
+	}
+	/* <tr>  
+
+					  <th  align="LEFT" width="50%" >   Pre-Carriage by
+					  <br  align="center">REFER CONTAINER   </th>
+					  <th  align="LEFT" width="50%" >   Place of Receipt by
+					  <br align="center">ANY PORT, INDIA   </th>
+					  below lines
+					  <th  align="left"  width="12.5%"style="border-right: 1px solid black;">   Shipping Marks: <br><br><BR align="center"> NO MARKS   </th>
+					  <th  align="LEFT" width="10%" style="border-right: 1px solid black;">   No. & kind of packings <br><BR><b> '.$TotalMcs.'</b> MCS   </th>
+					  <th  align="LEFT" width="22.5%" style="border-right: 1px solid black;">   Container Number <br><br><br><b align="center">1 X 40 FCL</b>   </th>
+					  <th  align="LEFT" width="13.5%" style="border-right: 1px solid black;">   Seal Number <br><br><br><b align="center">'.$SealNo.'</b>   </th>
+
+					  </tr> */
+
+	$FinalDestinationCountry = $AryData['FinalDestinationCountry'] ? strtoupper($AryData['FinalDestinationCountry']) : $FinalDestination . ',' . $DestinationCountryName;
+
+	$content .= '<tr>  
+           		
+				<th  align="LEFT" width="50%" style="font-size: 7px;">   Vessel / Flight No. 
+               <BR align="left"> ' . $OrgVesselName . ' <br>   ' . $OrgVOYNO . ' 
+				<br>   </th>
+				<th  align="LEFT" width="50%" style="font-size: 7px;">   Port of Loading
+				<br align="center">' . $PortofLoading . '   </th>
+				
+				</tr>
+				
+				<tr>  
+           		
+				<th  align="LEFT" width="50%" >   Port of Discharge
+				<br align="center">' . $PortOfDischarge . '   </th>
+				<th  align="LEFT" width="50%" >   Final Destination
+				<br align="center">' . $FinalDestinationCountry . '   </th>
+				
+				</tr>
+				';
+	if ($ShowDataLogger) {
+		$content .= '<tr>  
+           		
+				<th  align="LEFT" width="100%" >   <b><u>DATA LOGGERS : ' . $DataLogger . '
+				<br align="left">PLACED AT :' . $DataLoggerPositions . '</b></u>   </th>
+				
+				
+				</tr>';
+	}
+
+	$content .= '	<tr>  
+           		
+				<th  align="LEFT" width="50%" >   Marks & Nos
+				<br align="center">   </th>
+				<th  align="LEFT" width="50%" >   No.& Kind of Pkgs
+				<br align="center">' . $TotalMcs . 'M/Cs.</th>
+				</tr>';
+	if ($hsnCode) {
+		$content .= '<tr>
+			<th  align="LEFT" width="100%" >
+			<b>HSN Code :</b> ' . $hsnCode . '
+			</th>
+			</tr>';
+	}
+	$content .= '
+			
+			
+				</table>
+				</th>
+				
+				
+				<th width="55%">
+				<table border="1" cellspacing="0" cellpadding="1" nobr="true">
+				<tr > 
+				<th  align="LEFT"  ><b> Invoice No. & Date.
+				 ' . $InvNo . ',Dt. ' . $InvDate . '</b>    </th>
+				</tr>
+				
+				<tr> 
+				<th  align="LEFT" >   <b> Purchase Order No. & Date. 
+				<br> ' . $PoNo . $PoDate . ' </b>   </th>
+				</tr>';
+
+
+
+
+
+
+
+	$content .= '		<tr > 
+				<th  align="LEFT"  ><b> Other Reference(s) :
+				' . $ReferenceNo . '</b>
+				
+				   </th></tr >';
+	if ($showImporter) {
+
+		$content .= '	<tr> 
+           		
+		
+                <th  align="left" width="100%">   
+				<b><u> Importer of Record:</u></b> <br>  ' . $ImporterName . '
+				<br> ' . nl2br($ImporterAddress) . '    </th>
+				</tr>';
+	}
+	if ($ShowCWiseBuyer) {
+		if ($BuyerID != 0) {
+
+			$content .= '	<tr> 
+           		
+                <th  align="left" width="100%">    <b><u>Buyer 
+				(if other than consignee) :</b></u><br>' . $BuyerName . ',<br>' . nl2br($BuyerAddress) . '<br>   </th>
+				</tr>';
+		}
+	}
+
+	$content .= '<tr >
+				<th  align="LEFT"  >
+				 <u><b>' . $AryLables['Manufacturer'] . '</u> :</b><br> ' . $ProcessorName . '<br> ' . nl2br($ProcessorAddress) . '
+				 ';
+	if ($ShowCWiseApprovalNo) {
+		$content .= '<br> ' . $AryLables['ApprovalNo'] . '' . $ProcessorApprovalNo . '';
+	}
+
+	if ($ShowCWiseUsfda) {
+		$content .= '<br> BIO TERRORISM / USFDA REGISTRATION NO.  ' . $ProcessorUsfdaNo;
+	}
+
+	/* if ($showProFEI) {
+		$content .= '<BR> FEI # :  ' . $ProcessorFEI;
+	} */
+
+	$content .= '   </th></tr>';
+
+
+
+	$content .= '	<tr> 
+				<th border="1"  align="left" height="50%" width="49%">    Country of Origin of Goods 	
+				<br><b align="center"> INDIA</b>   </th>
+				
+				<th border="1"  align="left" width="51%">    Country of Final Destination  
+				<br><b align="center">  ' . $DestinationCountry . '</b>   </th>               
+				</tr>
+				<tr> 
+				
+			
+				
+				<th  align="LEFT"  width="100%" >   <b> <u>Terms of Payment:</u>
+				</b><br><BR> ' . $PaymentTerms . ' 
+				 
+				 <!--SHIPMENT TERM : ' . $ShippingTerms . ' ' . strtoupper($PortOfDischarge) . ', ' .
+		strtoupper($DestinationCountry) . ' -->
+				';
+
+
+
+
+	$content .= '    </th>
+				</tr>
+			<tr>  
+           		
+				<th align="LEFT">
+					<b><u>CONTAINER NO. ' . $ContainerNo . '</b></u> <b style="color:white">_______________</b>   
+					<b><u>SEAL NO. ' . $SealNo . '</b></u><br> ';
+	if ($ShowBLNo) {
+		$content .= '<b>' . $AryLables['BLNo'] . ' ' . $BLNo . '</b>';
+	}
+	if ($ShowBLDate) {
+		$content .= '<b style="color:white">_____________________</b><b>' . $AryLables['BLDate'] . ' ' . $BLDate . '</b>';
+	}
+	$content .= '</th>
+			</tr>
+				' . $ShippingDetails . '
+				</table>
+				</th>
+				
+				</tr> ';
+
+
+
+
+	$content .= '</table>';
+
+	return $content;
+}
+
+function getBreakTable($iconn, $ID)
+{
+	//include ($_SERVER['DOCUMENT_ROOT']."/includes/config.php");
+	global $AryData, $style, $PType, $AryLables;
+	$content = $style;
+
+
+	$size = 45;
+	$size1 = 55;
+
+
+
+
+
+
+	$ExporterID = $AryData['ExporterID'];
+	$ExporterName = $AryData['ExporterName'];
+	$ExporterAddress = $AryData['ExporterAddress'];
+	$ExporterUsfdaNo = $AryData['ExporterUsfdaNo'];
+	$DestinationCountryId = $AryData['DestinationCountryId'];
+	$CountryId = $AryData['CountryId'];
+	$ExporterIeCode = $AryData['ExporterIeCode'];
+	$ExporterGstNo = $AryData['ExporterGstNo'];
+
+	$ConsigneeID = $AryData['ConsigneeID'];
+	$BuyerID = $AryData['BuyerID'];
+	$ConsigneeName = $AryData['ConsigneeName'];
+	$ConsigneeAddress = $AryData['ConsigneeAddress'];
+	$BuyerName = $AryData['BuyerName'];
+	$BuyerAddress = $AryData['BuyerAddress'];
+
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$FinalDestination = $AryData['FinalDestination'];
+	$TotalGrossWtKgs = $AryData['TotalGrossWtKgs'];
+
+
+	$InvNo = $AryData['InvNo'];
+	$InvDate = $AryData['InvDate'];
+	$PoNo = $AryData['PoNo'];
+	$PoDate = $AryData['PoDate'];
+	$ShowBank = $AryData['ShowBank'];
+
+	$ProcessorName = $AryData['ProcessorName'];
+	$ProcessorAddress = $AryData['ProcessorAddress'];
+	$ProcessorUsfdaNo = $AryData['ProcessorUsfdaNo'];
+	$ProcessorFEI = $AryData['ProcessorFEI'];
+	$ProcessorApprovalNo = $AryData['ProcessorApprovalNo'];
+
+	$ShowShippingTerms = $AryData['ShowShippingTerms'];
+	$showBuyer = $AryData['showBuyer'];
+	$showImporter = $AryData['showImporter'];
+	$showNotifyParty = $AryData['showNotifyParty'];
+	$ShippingTerms = $AryData['ShippingTerms'];
+	$ProcessorIeCustomsNo = $AryData['ProcessorIeCustomsNo'];
+	//$ExporterRecAdd=$AryData['ExporterRecAdd'];
+	$NotifyPartyName = $AryData['NotifyPartyName'];
+	$NPartyAddress = $AryData['NPartyAddress'];
+	$NPartyContactNumber = $AryData['NPartyContactNumber'];
+	$ImporterName = $AryData['ImporterName'];
+	$ImporterAddress = $AryData['ImporterAddress'];
+
+	$PaymentTerms = $AryData['PaymentTerms'];
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$PortofLoading = $AryData['PortofLoading'];
+	$DestinationCountry = $AryData['DestinationCountry'];
+	//$PortofLoadingCountry=$AryData['PortofLoadingCountry'];
+	$DeliveryTerms = $AryData['DeliveryTerms'];
+	$ShowDeliveryTerms = $AryData['ShowDeliveryTerms'];
+	$QtyUnit = $AryData['QtyUnit'];
+	$UnitCurrency = $AryData['UnitCurrency'];
+	$TotalMcs = $AryData['TotalMcs'];
+	$ShipByDate = $AryData['ShipByDate'];
+	$SignURL = $AryData['SignURL'];
+	$AuthSign = $AryData['AuthSign'];
+	$PreparedBy = $AryData['PreparedBy'];
+	$BankID = $AryData['BankID'];
+	$Remarks = $AryData['Remarks'];
+	$showRemarks = $AryData['showRemarks'];
+	$showExpUsFda = $AryData['showExpUsFda'];
+	$showExpIECode = $AryData['showExpIECode'];
+	$showExpGSTNo = $AryData['showExpGSTNo'];
+
+	$ShowCWiseUsfda = $AryData['ShowCWiseUsfda'];
+	$showProFEI = $AryData['showProFEI'];
+	$showIgst = $AryData['showIgst'];
+	$showDiscount = $AryData['showDiscount'];
+	$TextSize = $AryData['TextSize'];
+
+	if ($QtyUnit == 'KGS') {
+		$Unit = 'KG';
+	} elseif ($QtyUnit == 'LBS') {
+		$Unit = 'LB';
+	} else {
+		$Unit = $QtyUnit;
+	}
+	if ($CountryId == 26 || $ConsigneeID == 92) {
+		$Grossweightin = '<th  align="center" width="20%" >
+				<font size="7">Gross Weight <br>' . $QtyUnit . ' ' . $AryLables['UnitInBreakUp'] . '</font></th>';
+	} else {
+		$Grossweightin = '<th  align="center" width="20%" ><font size="7"></font></th>';
+	}
+
+
+	$content = '
+				<table border="1" cellspacing="0" cellpadding="2" nobr="true" >
+				<tr>
+				<th  align="LEFT" width="59%" >     Description of Goods <b align="center"></b>   </th>
+                <th  align="center" width="21%" >
+				   Quantity in ' . $QtyUnit . ' ' . $AryLables['UnitInBreakUp'] . '   </th>
+				   ' . $Grossweightin . '
+				   <!--  <th  align="center" width="20%" >      </th>
+              <th  align="center" width="14.5%" >   Amount in ' . $UnitCurrency . '    </th>-->
+                </tr>';
+
+
+	$CurrentCount = 0;
+
+	//   $SqlVarietyMcs="
+	// SELECT sum(McS) As VarietyMcs, BuyerItemCode, 
+	// (SELECT CIDescription from ScrmCIGradeData WHERE PoGradeID=SPG.ID) as Description,SPG.Variety,SPG.Treatment,SPG.Grade,Aps.PackingStyle,SPG.Brand,SPG.PackingStyleID,BAP,SpeciesName FROM `ScrmPoGradeData` as SPG
+	// left join `AdminPackingStyles` as Aps on PackingStyleID=Aps.PCKID
+	// left join `ScrmPIVarietyList` as SPV on SPV.VarietyID=SPG.VarietyID
+	// left join `ScrmSpeciesMaster` as SPM on SPM.ShortCode=SPV.Species
+	//  WHERE InvId='$ID' GROUP by Variety,PackingStyleID,Brand order by SPG.ID";
+	$SqlVarietyMcs = "SELECT sum(McS) As VarietyMcs,BuyerItemCode,PrintStatus,
+			CIDescription as Description,Variety,Treatment,Grade,
+			 PackingStyle,Brand,PackingStyleID,BAP FROM `ScrmCIGradeData` 
+			 left join `AdminPackingStyles` as Aps on PackingStyleID=Aps.PCKID
+			 left join `ScrmBrandsMaster` SBM on  SBM.BrandName=Brand
+			 WHERE InvId='$ID' GROUP by CIDescription
+			 Order By ID asc";
+
+	$StmtVarietyMcs = $iconn->query($SqlVarietyMcs);
+	$RowCount = mysqli_num_rows($StmtVarietyMcs);
+
+	while ($VarietyMcsRow = $StmtVarietyMcs->fetch_assoc()) {
+		$CurrentCount++;
+
+
+		$Variety = $VarietyMcsRow['Variety'];
+		$Grade = $VarietyMcsRow['Grade'];
+		$Brand = $VarietyMcsRow['Brand'];
+		$BAP = $VarietyMcsRow['BAP'];
+		$BuyerItemCode = $VarietyMcsRow['BuyerItemCode'];
+		$BreakUpDescription = $VarietyMcsRow['Description'];
+		$PackingStyleID = $VarietyMcsRow['PackingStyleID'];
+		$Treatment = checkValueAval($VarietyMcsRow['Treatment']);
+		$SpeciesName = checkValueAval($VarietyMcsRow['SpeciesName']);
+		if ($BAP == 'NA') {
+			$BAP = '';
+		} else {
+			$BAP = $BAP;
+		}
+
+
+		$FontSize = "7px";
+
+
+
+		/*	
+							 $content.='<tr>';	
+								 /*if($BuyerItemCode!=''){
+							 $content.='
+							 <th align="center" width="15%" style="border-right:1px solid white;"  >    <u>Item Code</u>   </th>
+							 <th align="center" width="15%" style="border-right:1px solid white;"  >    <u>SIZE</u>   </th>';
+							 }else{*/
+		/*	$content.='<th align="center" width="30%" style="border-right:1px solid white;" >    <u>SIZE</u>   </th>';
+							  //}
+							  $content.='<th align="center" width="29%" style="border-right:1px solid black;" >   <u>NO. OF CTNS</u>   </th>
+							  <th align="center" width="21%" style="border-right:1px solid black;">      </th>
+
+							  </tr>';*/
+
+		$description_head = '<B><u>Description of Goods: </u></B><BR>1 X 40 FCL <BR>';
+		$W_SPACE = '<b style="color:white"> yuhjutgfrtgujkiolmnbvgftrkliomkjhygtfrdeswderfgtyhjmnkih</b>';
+		$Whitspace = '<b style="color:white"> yuhju</b>';
+		$FontSize = "7";
+		//$TOTAL_MCS=0;
+		$content .= '
+				
+			
+			
+			';
+
+
+
+		//$Description=$VarietyMcsRow['Variety'].''.$Treatment.'<br>'.$BreakUpDescription.'<br>';
+
+		if ($BreakUpDescription != '') {
+			$Description = $BreakUpDescription . '';
+		} else {
+			//$Description=$VarietyMcsRow['Variety'].''.$Treatment.'<br>';
+			$Description = $VarietyMcsRow['Variety'] . '';
+		}
+
+		if ($DestinationCountryId != 26) {
+			$Description .= '<u>PACKING : ' . $VarietyMcsRow['PackingStyle'] . ' ' . $SpeciesName . '</u>
+			 <b><br>' . $BAP . '</b>';
+		} else {
+			$Description .= '	PACKING : ' . $VarietyMcsRow['PackingStyle'] . ' ' . $SpeciesName . '' . $Whitspace . ' ';
+		}
+
+		if ($BreakUpDescription != '') {
+			$Description = $BreakUpDescription . '';
+		}
+
+		$content .= '
+			<tr>
+			<td width="59%" style="border-right: 1px solid black;" >' . nl2br($Description) . '</td>
+			<td align="center" width="21%" style="border-right: 1px solid black;">      </td>
+			<td align="center" width="13.5%" style="border-right: 1px solid white;">      </td>
+			</tr>';
+		if ($CurrentCount < 2) {
+			$content .= '<tr>';
+			/*if($BuyerItemCode!=''){
+									  $content.='
+									  <th align="center" width="15%" style="border-right:1px solid white;"  >    <u>Item Code</u>   </th>
+									  <th align="center" width="15%" style="border-right:1px solid white;"  >    <u>SIZE</u>   </th>';
+									  }else{*/
+			$content .= '<th align="center" width="30%" style="border-right:1px solid white;" ><u>SIZE</u></th>';
+			//}
+			$content .= '<th align="center" width="29%" style="border-right:1px solid black;" >   <u>NO. OF CTNS</u>   </th>
+			<th align="center" width="21%" style="border-right:1px solid black;">      </th>
+			
+			</tr>';
+		}
+
+		//   $SqlVariety="SELECT * FROM `ScrmPoGradeData` as PGD
+		// left join AdminPackingStyles as PS on PGD.PackingStyleID=PS.PCKID WHERE 
+		// InvId='$ID' and Variety='$Variety' and Brand='$Brand' 
+		// and	PackingStyleID='$PackingStyleID' order by abs(Grade)";   
+
+		$SqlVariety = "SELECT * FROM `ScrmCIGradeData` as PGD
+			left join AdminPackingStyles as PS on PGD.PackingStyleID=PS.PCKID WHERE 
+			InvId='$ID' and CIDescription='$BreakUpDescription' and Brand='$Brand' 
+			and	PackingStyleID='$PackingStyleID' order by abs(Grade)";
+
+		$StmtVariety = $iconn->query($SqlVariety);
+		$ArySubBreakUp = array();
+
+		while ($RowVariety = $StmtVariety->fetch_assoc()) {
+
+			//$ArySubBreakUp[]=$RowVariety['ID'];
+			$ArySubBreakUp[] = $RowVariety['PoGradeID']; //uma
+			//$BuyerItemCode=$RowVariety['BuyerItemCode'];
+			//echo $BuyerItemCode;$RowVariety['BuyerItemCode']; exit;
+			/*$AryPriceBreakUp=getBreakUpData($iconn,$RowVariety['ID']);
+										  $Qty=$AryPriceBreakUp['Qty'];
+										  $UsdValue=$AryPriceBreakUp['UsdValue']; 
+										  $TotalMcs=$AryPriceBreakUp['TotalMcs'];
+										  $Price=$AryPriceBreakUp['Price'];*/
+
+			$AryPriceBreakUp = getBreakUpData($iconn, $RowVariety['PoGradeID']);
+			$Qty = $AryPriceBreakUp['Qty'];
+			$UsdValue = $AryPriceBreakUp['UsdValue'];
+			$TotalMcs = $AryPriceBreakUp['TotalMcs'];
+			$Price = $AryPriceBreakUp['Price'];
+			$UnitPrice = $AryPriceBreakUp['UnitPrice'];
+			$GrossWeight = $AryPriceBreakUp['GrossWeight'];
+
+			$AryPaymentData = getPaymentValues($iconn, $ID);
+
+
+			$InvValueUSD = $AryPaymentData['InvValueUSD'];
+			$InvValueInr = $AryPaymentData['InvValueINR'];
+			$ExchangeRate = $AryPaymentData['ExchangeRate'];
+			$DiscountPerc = $AryPaymentData['DiscountPerc'];
+			$DiscountAmount = $AryPaymentData['DiscountAmount'];
+			$IgstPerc = $AryPaymentData['IgstPerc'];
+			$IgstValue = $AryPaymentData['IgstValue'];
+
+			//print_r($AryPriceBreakUp); exit;
+
+			if ($PType == 'KGS') {
+				$Price = sprintf("%0.7f", $UnitPrice);
+			} else {
+				$Price = sprintf("%0.2f", $Price);
+			}
+
+			//print_r($AryPriceBreakUp); exit;
+			// if($EnteredGrossWt!=''){
+			// 	$GrossWeight=$EnteredGrossWt;
+			// }
+
+
+
+			if ($CountryId == 26 || $ConsigneeID == 92) {
+				$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;"  >   
+					' . number_format($GrossWeight, 3) . '    </td>';
+			} else {
+				$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;">
+						</td>';
+			}
+
+
+			$content .= '<tr>';
+
+			/*if($BuyerItemCode!=''){
+									   $content.='
+									   <td align="center" width="15%" style="border-right:1px solid white;"  >   
+											<b>'.$RowVariety['BuyerItemCode'].'</b> 
+											  </td><td align="center" width="15%" style="border-right:1px solid white;"  >   
+											<b>'.$RowVariety['Grade'].'</b> 
+											  </td>';
+									   }else{*/
+			$content .= '<td align="center" width="30%"  style="border-right:1px solid white;" >   
+				 ' . $RowVariety['Grade'] . '
+				   </td>';
+			//}
+
+
+			$content .= '
+				<td align="center" width="29%" style="border-right:1px solid black;"  >   
+				' . $TotalMcs . '     </td>
+				<!--<td align="center" width="20%" style="border-right:1px solid black;"  >   
+				' . $RowVariety['Brand'] . '     </td>-->
+				<td align="center" width="21%" style="border-right:1px solid black;"  >   
+				' . number_format($Qty, 3) . '    </td>
+				' . $Grossweightin . '
+				<!--<td align="center" width="20%" style="border-right:1px solid black;"  >   
+				   </td>
+				
+				<td align="center" width="14.5%" style="border-right:1px solid black;" >   
+				' . number_format($UsdValue, 3) . '   </td>-->
+				
+				</tr>';
+		}
+
+		$SubVarityBrkUp = implode(',', $ArySubBreakUp);
+
+		$AryPriceData = getBreakUpData($iconn, $SubVarityBrkUp);
+		$Qty = $AryPriceData['Qty'];
+		$UsdValue = $AryPriceData['UsdValue'];
+		$TotalMcs = $AryPriceData['TotalMcs'];
+		$Price = $AryPriceData['Price'];
+		$GrossWeight = $AryPriceData['GrossWeight'];
+		//$EnteredGrossWt=$AryPriceData['EnteredGrossWt'];
+
+		if ($CountryId == 26 || $ConsigneeID == 92) {
+			$Grossweightin = '<td align="center" width="20%" >   
+					' . number_format($GrossWeight, 3) . '   </td>';
+		} else {
+			$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;">
+						</td>';
+		}
+
+		if ($RowCount > 1) {
+			$content .= '
+				<tr>
+				<td align="center" width="30%"  style="border-right:1px solid white;" >
+				   
+				<b>Total</b	>
+				   </td>
+				<td align="center" width="29%" style="
+				border-top:1px solid black;
+				border-bottom:1px solid black;
+				" >
+														
+														   
+				' . $TotalMcs . '   </td>
+				
+				<!--<td align="center" width="20%" style="border-right:1px solid black;">
+														
+														      </td>-->
+				<td align="center" width="21%" >   
+				' . number_format($Qty, 3) . '   </td>
+				' . $Grossweightin . '
+				<!--<td align="center" width="20%" style="border-right:1px solid black;">
+														      </td>
+				<td align="center" width="14.5%" style="border-top:1px solid black;
+				border-bottom:1px solid black;">
+														   
+				' . number_format($UsdValue, 2) . '   </td>-->
+				
+				</tr>';
+		}
+	}
+
+	$AryPriceData = getBreakUpData($iconn, $RowVariety['PoGradeID'], $ID);
+	$Qty = $AryPriceData['Qty'];
+	$UsdValue = $AryPriceData['UsdValue'];
+	$TotalMcs = $AryPriceData['TotalMcs'];
+	$Price = $AryPriceData['Price'];
+	$GrossWeight = $AryPriceData['GrossWeight'];
+
+	if ($CountryId == 26 || $ConsigneeID == 92) {
+		$Grossweightin = '<td align="center" width="20%" >   
+					' . number_format($GrossWeight, 3) . '   </td>';
+	} else {
+		$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;">
+						</td>';
+	}
+
+	$content .= ' 
+				<tr>
+				
+				<td align="center" width="30%" style="border-top: 1px solid black;" >   <B>
+				GRAND TOTAL </B>   </td>
+				<td align="center" width="29%" style="border-top: 1px solid black; " >   
+				' . $TotalMcs . '   </td>
+			<!--	<td align="center" width="20%" style="border-top: 1px solid black; border-right: 1px solid black;" >   
+				   </td>-->
+				<td align="center" width="21%" style="border-top: 1px solid black;border-right: 1px solid black;">   
+				' . number_format($Qty, 3) . '   </td>
+				' . $Grossweightin . '
+				<!--<td align="center" width="20%" style="border-top: 1px solid black;border-right: 1px solid black;" >   
+				   </td>
+				<td align="center" width="14.5%" style="
+				border-top: 1px solid black;
+				border-bottom: 1px solid black;
+				border-right: 1px solid black;">   
+				' . number_format($UsdValue, 2) . '   </td>-->
+				
+				
+				</tr>';
+
+
+
+
+
+
+	$content .= '</table>';
+
+
+	return $content;
+}
+
+function getSauceBreakTable($iconn, $ID)
+{
+	global $AryData, $style, $PType, $AryLables;
+	$content = $style;
+
+	$size = 45;
+	$size1 = 55;
+
+	$ExporterID = $AryData['ExporterID'];
+	$ExporterName = $AryData['ExporterName'];
+	$ExporterAddress = $AryData['ExporterAddress'];
+	$ExporterUsfdaNo = $AryData['ExporterUsfdaNo'];
+	$DestinationCountryId = $AryData['DestinationCountryId'];
+	$CountryId = $AryData['CountryId'];
+	$ExporterIeCode = $AryData['ExporterIeCode'];
+	$ExporterGstNo = $AryData['ExporterGstNo'];
+
+	$ConsigneeID = $AryData['ConsigneeID'];
+	$BuyerID = $AryData['BuyerID'];
+	$ConsigneeName = $AryData['ConsigneeName'];
+	$ConsigneeAddress = $AryData['ConsigneeAddress'];
+	$BuyerName = $AryData['BuyerName'];
+	$BuyerAddress = $AryData['BuyerAddress'];
+
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$FinalDestination = $AryData['FinalDestination'];
+	$TotalGrossWtKgs = $AryData['TotalGrossWtKgs'];
+
+	$InvNo = $AryData['InvNo'];
+	$InvDate = $AryData['InvDate'];
+	$PoNo = $AryData['PoNo'];
+	$PoDate = $AryData['PoDate'];
+	$ShowBank = $AryData['ShowBank'];
+
+	$ProcessorName = $AryData['ProcessorName'];
+	$ProcessorAddress = $AryData['ProcessorAddress'];
+	$ProcessorUsfdaNo = $AryData['ProcessorUsfdaNo'];
+	$ProcessorFEI = $AryData['ProcessorFEI'];
+	$ProcessorApprovalNo = $AryData['ProcessorApprovalNo'];
+
+	$ShowShippingTerms = $AryData['ShowShippingTerms'];
+	$showBuyer = $AryData['showBuyer'];
+	$showImporter = $AryData['showImporter'];
+	$showNotifyParty = $AryData['showNotifyParty'];
+	$ShippingTerms = $AryData['ShippingTerms'];
+	$ProcessorIeCustomsNo = $AryData['ProcessorIeCustomsNo'];
+	//$ExporterRecAdd=$AryData['ExporterRecAdd'];
+	$NotifyPartyName = $AryData['NotifyPartyName'];
+	$NPartyAddress = $AryData['NPartyAddress'];
+	$NPartyContactNumber = $AryData['NPartyContactNumber'];
+	$ImporterName = $AryData['ImporterName'];
+	$ImporterAddress = $AryData['ImporterAddress'];
+
+	$PaymentTerms = $AryData['PaymentTerms'];
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$PortofLoading = $AryData['PortofLoading'];
+	$DestinationCountry = $AryData['DestinationCountry'];
+	//$PortofLoadingCountry=$AryData['PortofLoadingCountry'];
+	$DeliveryTerms = $AryData['DeliveryTerms'];
+	$ShowDeliveryTerms = $AryData['ShowDeliveryTerms'];
+	$QtyUnit = $AryData['QtyUnit'];
+	$UnitCurrency = $AryData['UnitCurrency'];
+	$TotalMcs = $AryData['TotalMcs'];
+	$ShipByDate = $AryData['ShipByDate'];
+	$SignURL = $AryData['SignURL'];
+	$AuthSign = $AryData['AuthSign'];
+	$PreparedBy = $AryData['PreparedBy'];
+	$BankID = $AryData['BankID'];
+	$Remarks = $AryData['Remarks'];
+	$showRemarks = $AryData['showRemarks'];
+	$showExpUsFda = $AryData['showExpUsFda'];
+	$showExpIECode = $AryData['showExpIECode'];
+	$showExpGSTNo = $AryData['showExpGSTNo'];
+
+	$ShowCWiseUsfda = $AryData['ShowCWiseUsfda'];
+	$showProFEI = $AryData['showProFEI'];
+	$showIgst = $AryData['showIgst'];
+	$showDiscount = $AryData['showDiscount'];
+	$TextSize = $AryData['TextSize'];
+
+	if ($QtyUnit == 'KGS') {
+		$Unit = 'KG';
+	} elseif ($QtyUnit == 'LBS') {
+		$Unit = 'LB';
+	} else {
+		$Unit = $QtyUnit;
+	}
+	if ($CountryId == 26 || $ConsigneeID == 92) {
+		$Grossweightin = '<th  align="center" width="20%" >
+				<font size="7">Gross Weight <br>' . $QtyUnit . ' ' . $AryLables['UnitInBreakUp'] . '</font></th>';
+	} else {
+		$Grossweightin = '<th  align="center" width="20%" ><font size="7"></font></th>';
+	}
+
+	$content = '
+		<table border="1" cellspacing="0" cellpadding="2" nobr="true" >
+		<tr>
+		<th  align="LEFT" width="59%" >     Description of Goods <b align="center"></b>   </th>
+		<th  align="center" width="21%" >
+		Quantity in ' . $QtyUnit . ' ' . $AryLables['UnitInBreakUp'] . '   </th>
+		' . $Grossweightin . '
+		</tr>';
+
+
+	$CurrentCount = 0;
+
+	$SqlVarietyMcs = "SELECT sum(McS) As VarietyMcs,BuyerItemCode,PrintStatus,
+			CIDescription as Description,Variety,Treatment,Grade,
+			 PackingStyle,Brand,PackingStyleID,BAP FROM `ScrmCIGradeData`
+			 left join `AdminPackingStyles` as Aps on PackingStyleID=Aps.PCKID
+			 left join `ScrmBrandsMaster` SBM on  SBM.BrandName=Brand
+			 WHERE InvId='$ID' GROUP by CIDescription
+			 Order By ID asc";
+
+	$StmtVarietyMcs = $iconn->query($SqlVarietyMcs);
+	$RowCount = mysqli_num_rows($StmtVarietyMcs);
+
+	while ($VarietyMcsRow = $StmtVarietyMcs->fetch_assoc()) {
+		$CurrentCount++;
+		$Variety = $VarietyMcsRow['Variety'];
+		$Grade = $VarietyMcsRow['Grade'];
+		$Brand = $VarietyMcsRow['Brand'];
+		$BAP = $VarietyMcsRow['BAP'];
+		$BuyerItemCode = $VarietyMcsRow['BuyerItemCode'];
+		$BreakUpDescription = $VarietyMcsRow['Description'];
+		$PackingStyleID = $VarietyMcsRow['PackingStyleID'];
+		$Treatment = checkValueAval($VarietyMcsRow['Treatment']);
+		$SpeciesName = checkValueAval($VarietyMcsRow['SpeciesName']);
+		if ($BAP == 'NA') {
+			$BAP = '';
+		} else {
+			$BAP = $BAP;
+		}
+
+		$FontSize = "7px";
+
+		$description_head = '<B><u>Description of Goods: </u></B><BR>1 X 40 FCL <BR>';
+		$W_SPACE = '<b style="color:white"> yuhjutgfrtgujkiolmnbvgftrkliomkjhygtfrdeswderfgtyhjmnkih</b>';
+		$Whitspace = '<b style="color:white"> yuhju</b>';
+		$FontSize = "7";
+		$content .= '';
+
+		// $Description = $VarietyMcsRow['Variety'] . '' . $Treatment . '<br>' . $BreakUpDescription . '<br>';
+
+		if ($BreakUpDescription != '') {
+			$Description = $BreakUpDescription . '';
+		} else {
+			//$Description=$VarietyMcsRow['Variety'].''.$Treatment.'<br>';
+			$Description = $VarietyMcsRow['Variety'] . '';
+		}
+
+		if ($DestinationCountryId != 26) {
+			$Description .= '<u>PACKING : ' . $VarietyMcsRow['PackingStyle'] . ' ' . $SpeciesName . '</u>
+			 <b><br>' . $BAP . '</b>';
+		} else {
+			$Description .= '	PACKING : ' . $VarietyMcsRow['PackingStyle'] . ' ' . $SpeciesName . '' . $Whitspace . ' ';
+		}
+
+		if ($BreakUpDescription != '') {
+			$Description = $BreakUpDescription . '';
+		}
+
+		$content .= '
+			<tr>
+			<td width="59%" style="border-right: 1px solid black;" >' . nl2br($Description) . '</td>
+			<td align="center" width="21%" style="border-right: 1px solid black;">      </td>
+			<td align="center" width="13.5%" style="border-right: 1px solid white;">      </td>
+			</tr>';
+
+		if ($CurrentCount < 2) {
+			$content .= '<tr>';
+			$content .= '<th align="center" width="10%" style="border-right:1px solid white;" ><u>SIZE</u></th>';
+			// $content .= '<th align="center" width="10%" style="border-right:1px solid white;" ><u>PRODUCT</u></th>';
+			$content .= '<th align="center" width="28%" style="border-right:1px solid white;" ><u>PACKING</u></th>
+				<th align="center" width="12%" style="border-right:1px solid white;" ><u>NO. OF CTNS</u></th>
+				<th align="center" width="9%" style="border-right:1px solid black;"></th>
+				<th align="center" width="21%" style="border-right:1px solid black;"></th>
+				</tr>';
+		}
+
+		$SqlVariety = "SELECT * FROM `ScrmCIGradeData` as PGD
+			left join AdminPackingStyles as PS on PGD.PackingStyleID=PS.PCKID WHERE
+			InvId='$ID' and CIDescription='$BreakUpDescription' and Brand='$Brand'
+			and	PackingStyleID='$PackingStyleID' order by abs(Grade)";
+
+		$StmtVariety = $iconn->query($SqlVariety);
+		$ArySubBreakUp = array();
+
+		while ($RowVariety = $StmtVariety->fetch_assoc()) {
+
+			$TotalQty = 0;
+			$ArySubBreakUp[] = $RowVariety['PoGradeID'];
+
+			$AryPriceBreakUp = getBreakUpData($iconn, $RowVariety['PoGradeID']);
+			$Qty = $AryPriceBreakUp['Qty'];
+			$UsdValue = $AryPriceBreakUp['UsdValue'];
+			$TotalMcs = $AryPriceBreakUp['TotalMcs'];
+			$Price = $AryPriceBreakUp['Price'];
+			$UnitPrice = $AryPriceBreakUp['UnitPrice'];
+			$GrossWeight = $AryPriceBreakUp['GrossWeight'];
+			$PackingStyle = $RowVariety['PackingStyle'];
+			$Cups = 0;
+
+			$AryShrimpData = getShrimpData($iconn, $RowVariety['VarietyID']);
+			$ArySauceData = getSauceData($iconn, $RowVariety['VarietyID']);
+
+			if (!empty($ArySauceData) && !empty($AryShrimpData)) {
+				$HasSauce = $ArySauceData['HasSauce'];
+				if ($HasSauce == 'Yes') {
+					$ShrimpQty = $AryShrimpData['ShrimpTotalSlabs'] * $AryShrimpData['ShrimpSlabWeight'] *
+						$AryShrimpData['ShrimpLbsFactor'] * $TotalMcs;
+					$Qty = $ShrimpQty;
+					$PackingStyle = $AryShrimpData['ShrimpPackingStyle'];
+					$Cups = $ArySauceData['SauceTotalSlabs'] * $TotalMcs;
+					$SauceQty = $ArySauceData['SauceTotalSlabs'] * $ArySauceData['SauceSlabWeight'] *
+						$ArySauceData['SauceLbsFactor'] * $TotalMcs;
+				}
+			}
+
+			$TotalQty = $Qty + $SauceQty;
+
+			// $AryPaymentData = getPaymentValues($iconn, $ID);
+
+			// $InvValueUSD = $AryPaymentData['InvValueUSD'];
+			// $InvValueInr = $AryPaymentData['InvValueINR'];
+			// $ExchangeRate = $AryPaymentData['ExchangeRate'];
+			// $DiscountPerc = $AryPaymentData['DiscountPerc'];
+			// $DiscountAmount = $AryPaymentData['DiscountAmount'];
+			// $IgstPerc = $AryPaymentData['IgstPerc'];
+			// $IgstValue = $AryPaymentData['IgstValue'];
+
+			//print_r($AryPriceBreakUp); exit;
+
+			if ($PType == 'KGS') {
+				$Price = sprintf("%0.7f", $UnitPrice);
+			} else {
+				$Price = sprintf("%0.2f", $Price);
+			}
+
+			if ($CountryId == 26 || $ConsigneeID == 92) {
+				$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;">
+				' . number_format($GrossWeight, 3) . ' </td>';
+			} else {
+				$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;"></td>';
+			}
+
+			$content .= '<tr>';
+			$content .= '<td align="center" width="10%"  style="border-right:1px solid white;">
+				' . $RowVariety['Grade'] . ' </td>';
+			// $content .= '<td align="center" width="10%"  style="border-right:1px solid white;" >SHRIMP</td>';
+			$content .= '<td align="center" width="28%"  style="border-right:1px solid white;">
+				' . $VarietyMcsRow['PackingStyle'] . ' </td>';
+			$content .= '
+				<td align="center" width="12%" style="border-right:1px solid white;">
+				' . $TotalMcs . ' </td>';
+			$content .= '<td align="center" width="9%"  style="border-right:1px solid black;">MCS</td>';
+			$content .= '
+				<td align="center" width="21%" style="border-right:1px solid black;">
+				' . number_format($TotalQty, 3) . ' </td>
+				' . $Grossweightin . '
+				</tr>';
+
+			// if ($HasSauce == 'Yes') {
+			// 	$content .= '<tr>';
+			// 	$content .= '<td align="center" width="10%"  style="border-right:1px solid white;"></td>';
+			// 	$content .= '<td align="center" width="10%"  style="border-right:1px solid white;">SAUCE</td>';
+			// 	$content .= '<td align="center" width="18%"  style="border-right:1px solid white;">
+			// 	' . $ArySauceData['SaucePackingStyle'] . ' </td>';
+			// 	$content .= '
+			// 	<td align="center" width="12%" style="border-right:1px solid white;">
+			// 	' . $Cups . ' </td>';
+			// 	$content .= '<td align="center" width="9%"  style="border-right:1px solid black;" >CUPS</td>';
+			// 	$content .= '
+			// 	<td align="center" width="21%" style="border-right:1px solid black;">
+			// 	' . number_format($SauceQty, 3) . ' </td>
+			// 	' . $Grossweightin . '
+			// 	</tr>';
+			// }
+		}
+
+		$SubVarityBrkUp = implode(',', $ArySubBreakUp);
+
+		$AryPriceData = getBreakUpData($iconn, $SubVarityBrkUp);
+		$Qty = $AryPriceData['Qty'];
+		$UsdValue = $AryPriceData['UsdValue'];
+		$TotalMcs = $AryPriceData['TotalMcs'];
+		$Price = $AryPriceData['Price'];
+		$GrossWeight = $AryPriceData['GrossWeight'];
+		//$EnteredGrossWt=$AryPriceData['EnteredGrossWt'];
+
+		if ($CountryId == 26 || $ConsigneeID == 92) {
+			$Grossweightin = '<td align="center" width="20%">
+					' . number_format($GrossWeight, 3) . '   </td>';
+		} else {
+			$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;">
+						</td>';
+		}
+
+		if ($RowCount > 1) {
+			$content .= '
+				<tr>
+				<td align="center" width="10%"  style="border-right:1px solid white;"></td>
+				<td align="center" width="10%"  style="border-right:1px solid white;"><b>Total</b></td>
+				<td align="center" width="18%"  style="border-right:1px solid white;"></td>
+				<td align="center" width="12%" style="border-top:1px solid black;border-bottom:1px solid black;">
+				' . $TotalMcs . ' </td>
+				<td align="center" width="9%" style="border-right:1px solid black;"></td>
+				<td align="center" width="21%">
+				' . number_format($Qty, 3) . ' </td>
+				' . $Grossweightin . '
+				</tr>';
+		}
+	}
+
+	$AryPriceData = getBreakUpData($iconn, $RowVariety['PoGradeID'], $ID);
+	$Qty = $AryPriceData['Qty'];
+	// $UsdValue = $AryPriceData['UsdValue'];
+	$TotalMcs = $AryPriceData['TotalMcs'];
+	$Price = $AryPriceData['Price'];
+	$GrossWeight = $AryPriceData['GrossWeight'];
+
+	if ($CountryId == 26 || $ConsigneeID == 92) {
+		$Grossweightin = '<td align="center" width="20%">
+		' . number_format($GrossWeight, 3) . ' </td>';
+	} else {
+		$Grossweightin = '<td align="center" width="20%" style="border-right:1px solid black;"></td>';
+	}
+
+	$content .= '
+		<tr>
+		<td align="center" width="38%" style="border-top: 1px solid black;"><B>
+		GRAND TOTAL</B></td>
+		<td align="center" width="12%" style="border-top: 1px solid black;">
+		' . $TotalMcs . ' </td>
+		<td align="center" width="9%" style="border-top: 1px solid black;border-right:1px solid black;"></td>
+		<td align="center" width="21%" style="border-top: 1px solid black;border-right: 1px solid black;">
+		' . number_format($Qty, 3) . ' </td>
+		' . $Grossweightin . '
+		</tr>';
+	$content .= '</table>';
+
+
+	return $content;
+}
+
+function getFooterTable($iconn, $ID)
+{
+	//include ($_SERVER['DOCUMENT_ROOT']."/includes/config.php");
+
+	global $AryData, $style;
+	$content = $style;
+
+
+	$size = 45;
+	$size1 = 55;
+
+
+
+
+	$AryPriceData = getBreakUpData($iconn, $RowVariety['PoGradeID'], $ID);
+	$Qty = $AryPriceData['Qty'];
+	$UsdValue = $AryPriceData['UsdValue'];
+	$TotalMcs = $AryPriceData['TotalMcs'];
+	$Price = $AryPriceData['Price'];
+	$GlazePerc = $AryPriceData['GlazePerc'];
+	$ProductWeightWOGLbs = $AryPriceData['ProductWeightWOGLbs'];
+	$ProductWeightWOGKgs = $AryPriceData['ProductWeightWOGKgs'];
+	$WtPerCtnTxt = $AryPriceData['WtPerCtnTxt'];
+
+
+	//print_r($AryPriceData); exit;
+
+
+	$ExporterID = $AryData['ExporterID'];
+	$ExporterName = $AryData['ExporterName'];
+	$ExporterAddress = $AryData['ExporterAddress'];
+	$ExporterUsfdaNo = $AryData['ExporterUsfdaNo'];
+	$DestinationCountryId = $AryData['DestinationCountryId'];
+	$ExporterIeCode = $AryData['ExporterIeCode'];
+	$ExporterGstNo = $AryData['ExporterGstNo'];
+	$TotalGrossWtKgs = $AryData['TotalGrossWtKgs'];
+
+	$ConsigneeID = $AryData['ConsigneeID'];
+	$BuyerID = $AryData['BuyerID'];
+	$ConsigneeName = $AryData['ConsigneeName'];
+	$ConsigneeAddress = $AryData['ConsigneeAddress'];
+	$BuyerName = $AryData['BuyerName'];
+	$BuyerAddress = $AryData['BuyerAddress'];
+
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$FinalDestination = $AryData['FinalDestination'];
+
+
+	$InvNo = $AryData['InvNo'];
+	$InvDate = $AryData['InvDate'];
+	$PoNo = $AryData['PoNo'];
+	$PoDate = $AryData['PoDate'];
+	$ShowBank = $AryData['ShowBank'];
+
+	$ProcessorName = $AryData['ProcessorName'];
+	$ProcessorAddress = $AryData['ProcessorAddress'];
+	$ProcessorUsfdaNo = $AryData['ProcessorUsfdaNo'];
+	$ProcessorFEI = $AryData['ProcessorFEI'];
+	$ProcessorApprovalNo = $AryData['ProcessorApprovalNo'];
+
+	$ShowShippingTerms = $AryData['ShowShippingTerms'];
+	$showBuyer = $AryData['showBuyer'];
+	$showImporter = $AryData['showImporter'];
+	$showNotifyParty = $AryData['showNotifyParty'];
+	$ShippingTerms = $AryData['ShippingTerms'];
+	$ProcessorIeCustomsNo = $AryData['ProcessorIeCustomsNo'];
+	//$ExporterRecAdd=$AryData['ExporterRecAdd'];
+	$NotifyPartyName = $AryData['NotifyPartyName'];
+	$NPartyAddress = $AryData['NPartyAddress'];
+	$NPartyContactNumber = $AryData['NPartyContactNumber'];
+	$ImporterName = $AryData['ImporterName'];
+	$ImporterAddress = $AryData['ImporterAddress'];
+
+	$PaymentTerms = $AryData['PaymentTerms'];
+	$PortOfDischarge = $AryData['PortOfDischarge'];
+	$PortofLoading = $AryData['PortofLoading'];
+	$DestinationCountry = $AryData['DestinationCountry'];
+	//$PortofLoadingCountry=$AryData['PortofLoadingCountry'];
+	$DeliveryTerms = $AryData['DeliveryTerms'];
+	$ShowDeliveryTerms = $AryData['ShowDeliveryTerms'];
+	$QtyUnit = $AryData['QtyUnit'];
+	$UnitCurrency = $AryData['UnitCurrency'];
+	$TotalMcs = $AryData['TotalMcs'];
+	$ShipByDate = $AryData['ShipByDate'];
+	$SignURL = $AryData['SignURL'];
+	$AuthSign = $AryData['AuthSign'];
+	$PreparedBy = $AryData['PreparedBy'];
+	$BankID = $AryData['BankID'];
+	$Remarks = $AryData['Remarks'];
+	$showRemarks = $AryData['showRemarks'];
+	$showExpUsFda = $AryData['showExpUsFda'];
+	$showExpIECode = $AryData['showExpIECode'];
+	$showExpGSTNo = $AryData['showExpGSTNo'];
+	$ShowCWiseWeightPerctText = $AryData['ShowCWiseWeightPerctText'];
+	$ShowCWiseComSplNote = $AryData['ShowCWiseComSplNote'];
+	$ShowCWiseComDesNote = $AryData['ShowCWiseComDesNote'];
+	$ShowCWiseProductSpecification = $AryData['ShowCWiseProductSpecification'];
+	$ShowCWiseSpecification = $AryData['ShowCWiseSpecification'];
+	$ShowCWiseNetWeight = $AryData['ShowCWiseNetWeight'];
+	$ShowCWiseGrossWeight = $AryData['ShowCWiseGrossWeight'];
+	$ComDescriptionSpl = $AryData['ComInvDescription'];
+	$PackingRemarks = $AryData['PackingRemarks'];
+
+
+	$ShowCWiseUsfda = $AryData['ShowCWiseUsfda'];
+	$showProFEI = $AryData['showProFEI'];
+	$ShowBank = $AryData['ShowBank'];
+	$ShowInvoicevalue = $AryData['ShowInvoicevalue'];
+	$ShowFrightCharge = $AryData['ShowFrightCharge'];
+
+
+
+
+
+	$AryBankData = getBankDetails($iconn, $BankID);
+
+	//print_r($AryBankData); exit;
+
+
+	$BenfName = $AryBankData['AccntName'];
+	$BenfAccNo = $AryBankData['AccountNumber'];
+	$BenfBankName = $AryBankData['BankName'];
+	$BenfBankAddress = $AryBankData['BankAddress'];
+	$BenfBankCode = $AryBankData['SwiftCode'];
+
+	$BankDetails = $AryBankData['BankDetails'];
+	$RoutingThrough = $AryBankData['RoutingThrough'];
+	$NegotiatingBank = $AryBankData['NegotiatingBank'];
+
+
+	$BILL_WORD = numberTowords($UsdValue);
+
+
+	$NetWgtKgs = $AryPriceData['NetWgtKgs'];
+	$NetWgtLbs = $AryPriceData['NetWgtLbs'];
+	$GrossWeightKgs = $AryPriceData['GrossWeightKgs'];
+	$GrossWeightLbs = $AryPriceData['GrossWeightLbs'];
+	if ($TotalGrossWtKgs != '') {
+		if ($QtyUnit == 'KGS') {
+			$GrossWeightKgs = $TotalGrossWtKgs;
+			$GrossWeightLbs = $TotalGrossWtKgs * 2.204;
+		} else {
+			$GrossWeightKgs = $TotalGrossWtKgs * 0.454;
+			$GrossWeightLbs = $TotalGrossWtKgs;
+		}
+	} else {
+		$GrossWeightKgs = $AryPriceData['GrossWeightKgs'];
+		$GrossWeightLbs = $AryPriceData['GrossWeightLbs'];
+	}
+	$AryPaymentData = getPaymentValues($iconn, $ID);
+
+	//print_r($AryPaymentData); exit;
+	$FrieghtCharge = $AryPaymentData['FrieghtCharge'];
+	$DiscountAmount = $AryPaymentData['DiscountAmount'];
+	$InvValueUSDWithOutDuties = $AryPaymentData['InvValueUSDWithOutDuties'];
+	$InvValueINRWithOutDuties = $AryPaymentData['InvValueINRWithOutDuties'];
+	$DutiesPrice = $AryPaymentData['DutiesPrice'];
+	$FOBValueUSD = $AryPaymentData['FOBValueUSD'];
+	$AntiDumpingDuty = round($AryPaymentData['AntiDumpingDuty'], 2);
+	$MerchantDuty = round($AryPaymentData['MerchantDuty'], 2);
+	$HarborDuty = round($AryPaymentData['HarborDuty'], 2);
+	$FOBValueINR = round($AryPaymentData['FOBValueINR']);
+	$InvValueUSD = $AryPaymentData['InvValueUSD'];
+
+
+
+	$content .= '
+			<table border="1" cellspacing="0" cellpadding="2" nobr="true">
+			
+			<tr>';
+
+
+	$content .= '<td width="100%">
+			
+			<table border="0" cellspacing="0" cellpadding="2" nobr="true">';
+
+	if ($QtyUnit == 'KGS') {
+		$content .= '<tr>
+			<td align="left" width="30%">   <b>GROSS WEIGHT:</b>    </td>
+			<td align="left" width="35%" >    <b>' . number_format($GrossWeightKgs, 3) . ' KGS</b>   </td>
+			</tr>';
+		$content .= '<tr>
+			<td align="left" width="30%">   <b>NET WEIGHT: </b>   </td>
+			<td align="left" width="35%" >    <b>' . number_format($NetWgtKgs, 3) . ' KGS</b>   </td>
+			</tr>';
+
+		if ($GlazePerc != 0) {
+			$content .= '<tr>
+			<td align="left" width="30%">   <b>NET WEIGHT WITHOUT GLAZE </b>   </td>
+			<td align="left" width="35%" >    <b> ' . number_format($ProductWeightWOGKgs, 3) . ' KGS</b>   </td>
+			</tr>';
+		}
+	} else {
+		$content .= '<tr>
+			<td align="left" width="30%">   GROSS WEIGHT    </td>
+			<td align="left" width="35%" >    <b>: ' . number_format($GrossWeightLbs, 3) . ' LBS</b>   </td>';
+		if ($ShowCWiseGrossWeight) {
+			$content .= '<td align="left" width="35%" >    <b> ' . number_format($GrossWeightKgs, 3) . ' KGS</b>   </td>';
+		}
+		$content .= '</tr>';
+
+		$content .= '<tr>
+			<td align="left" width="30%">   NET WEIGHT    </td>
+			<td align="left" width="35%" >    <b>: ' . number_format($NetWgtLbs, 3) . ' LBS</b>   </td>';
+		if ($ShowCWiseGrossWeight) {
+			$content .= '
+			<td align="left" width="35%" >    <b> ' . number_format($NetWgtKgs, 3) . ' KGS</b>   </td>';
+		}
+		$content .= '</tr>';
+
+		if ($GlazePerc != 0) {
+			$content .= '<tr>
+			<td align="left" width="30%">   <b>NET WEIGHT WITHOUT GLAZE</b>    </td>
+			<td align="left" width="35%" >    <b> ' . number_format($ProductWeightWOGLbs, 3) . ' LBS</b>   </td>
+			</tr>';
+		}
+	}
+
+
+
+	$content .= '</table>';
+
+
+
+	$content .= '</td></tr></table>';
+
+
+
+
+
+
+	$content .= '<table border="1" cellspacing="0" cellpadding="5"  nobr="true"><tr>';
+
+	$formated_date = date("Y-m-d", strtotime($InvDate));
+	$AryDescription = getInvoiceDescription($iconn, $formated_date);
+	$CommercialNote = $AryDescription['CommercialNote'];
+
+	$ArrayProductDescription = getProductSpec($iconn, $ID);
+
+
+	$content .= '</tr>';
+
+	/* if ($CustomNote != '') {
+		$content .= '<tr>  
+							<th  align="LEFT"  width="100%"><font size="8"> ' . nl2br($CustomNote) . '<BR><BR> 
+
+
+						 </th> 
+						 </tr>';
+	} */
+	$content .= '<tr>
+				<th  align="bottom"  width="100%">   ';
+	if ($ShowCWiseWeightPerctText) {
+		$content .= '' . $WtPerCtnTxt . '<br><br>';
+	}
+	// $ComDescriptionSpl=str_replace(' ', '&nbsp;', $ComDescriptionSpl);
+	if ($CommercialNote != '' && $ShowCWiseComDesNote) {
+		//echo $CommercialNote; 
+		$content .= '' . nl2br($CommercialNote) . '<br><br>';
+	}
+	if ($ComDescriptionSpl != '' && $ShowCWiseComSplNote) {
+		//$content.=nl2br($ComDescriptionSpl).'<br>';
+	}
+	if ($ShowCWiseProductSpecification) {
+		//$content.=getProductSpec($iconn,$ID);
+		$content .= $ArrayProductDescription['Desc'];
+	}
+
+
+
+	if ($PackingRemarks != '') {
+		$PackingRemarks = str_replace(' ', '&nbsp;', $PackingRemarks);
+		$content .= nl2br($PackingRemarks) . '<br><br>';
+	}
+
+	if ($ShowCWiseSpecification) {
+		// Added this Consignee condition 28-04-2025
+		if ($ConsigneeID != '' && ($ConsigneeID == '53' || $ConsigneeID == '92' || $ConsigneeID == '88') && $ArrayProductDescription['Speciesdesc'] === 'LITOPENAEUS VANNAMEI') {
+			$content .= 'SPECIES : ' . 'PENAEUS VANNAMEI';
+		} else {
+			$content .= 'SPECIES : ' . $ArrayProductDescription['Speciesdesc'];
+		}
+	}
+
+	//}
+	$content .= '   </th>
+           
+		  
+			</tr><tr> <th  align="center"  width="70%"></th><th  align="center"  width="30%">    
+			<B> for ' . $AuthSign . ',</B><BR><BR><BR>
+			
+						
+
+			<p STYLE="text-align:center" > <b>AUTHORISED SIGNATORY <br> Signature & Date </b></p>   </th></tr>
+							
+				
+				</table>';
+
+	return $content;
+}
